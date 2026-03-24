@@ -1,8 +1,9 @@
 'use client';
+import React from 'react';
 
-import Navbar from '@/components/Navbar';
-import GameViewport from '@/components/GameViewport';
-import CoinPopup from '@/components/CoinPopup';
+import Navbar from '../components/Navbar';
+import GameViewport from '../components/GameViewport';
+import CoinPopup from '../components/CoinPopup';
 
 export default function Home() {
   return (

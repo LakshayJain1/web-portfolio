@@ -1,6 +1,7 @@
+import React from "react";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { GameProvider } from "@/components/GameContext";
+import { GameProvider } from "../components/GameContext";
 
 const BASE_URL = "https://devlakshay.dev";
 
