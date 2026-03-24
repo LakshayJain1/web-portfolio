@@ -174,7 +174,10 @@ export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerr
       const now = performance.now();
 
       const config = WORLD_DATA[worldId];
-      if (!config) return;
+      if (!config || !config.pipes) {
+        if (animationId) animationId = requestAnimationFrame(loop);
+        return; 
+      }
 
       // Draw clouds if not underground
       if (theme !== 'underground') {
@@ -200,17 +203,20 @@ export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerr
       }
 
       // Draw pipes with down-arrow hint
-      config.pipes.forEach(p => {
-        drawTile(ctx, p.x, groundY - 74, 'pipe');
-        
-        // Blinking down arrow above pipe
-        if (Math.floor(t * 2) % 2 === 0) {
-          ctx.fillStyle = '#FFF';
-          ctx.font = '10px "Press Start 2P"';
-          ctx.textAlign = 'center';
-          ctx.fillText('▼', p.x + 16, groundY - 84);
-        }
-      });
+      if (config.pipes) {
+        config.pipes.forEach(p => {
+          if (!p) return;
+          drawTile(ctx, p.x, groundY - 74, 'pipe');
+          
+          // Blinking down arrow above pipe
+          if (Math.floor(t * 2) % 2 === 0) {
+            ctx.fillStyle = '#FFF';
+            ctx.font = '10px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText('▼', p.x + 16, groundY - 84);
+          }
+        });
+      }
 
       // Draw blocks with bounce animation
       if (config.blocks) {

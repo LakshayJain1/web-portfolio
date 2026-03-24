@@ -97,10 +97,11 @@ export default function GameViewport() {
           willChange: 'transform',
         }}
       >
-        {activeWorld === 'hero' && <HeroWorld key={worldKey} />}
-        {activeWorld === 'about' && <AboutWorld key={worldKey} />}
-        {activeWorld === 'projects' && <ProjectsWorld key={worldKey} />}
-        {activeWorld === 'contact' && <ContactWorld key={worldKey} />}
+        {/* Render previous world during exit transition to avoid sudden black screen */}
+        {(transitionState === 'out' ? prevWorld : activeWorld) === 'hero' && <HeroWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
+        {(transitionState === 'out' ? prevWorld : activeWorld) === 'about' && <AboutWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
+        {(transitionState === 'out' ? prevWorld : activeWorld) === 'projects' && <ProjectsWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
+        {(transitionState === 'out' ? prevWorld : activeWorld) === 'contact' && <ContactWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
       </div>
 
       <Player />

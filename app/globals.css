@@ -33,7 +33,7 @@ html {
 
 body {
   font-family: 'Press Start 2P', monospace;
-  background: #000;
+  background: var(--sky, #5C94FC);
   color: #FFF;
   overflow-x: hidden;
   cursor: crosshair;
