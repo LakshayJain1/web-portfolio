@@ -34,8 +34,9 @@ export default function GameViewport() {
     setPixelGrid(grid);
   }, []);
 
+  // Handle world transition sequence
   useEffect(() => {
-    if (activeWorld !== prevWorld && transitionState === 'idle') {
+    if (activeWorld !== prevWorld) {
       setTransitionState('out');
       
       const timerOut = setTimeout(() => {
@@ -46,13 +47,15 @@ export default function GameViewport() {
         const timerIn = setTimeout(() => {
           setTransitionState('idle');
         }, 600);
+        
+        return () => clearTimeout(timerIn);
       }, 600);
       
       return () => {
         clearTimeout(timerOut);
       };
     }
-  }, [activeWorld, prevWorld, transitionState]);
+  }, [activeWorld, prevWorld]);
 
   // Close modal on ESC
   useEffect(() => {
