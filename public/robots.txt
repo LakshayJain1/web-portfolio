@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://devlakshay.dev/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Allow important paths
+Allow: /$
+
+# Block any future admin paths
+Disallow: /admin/
+Disallow: /api/

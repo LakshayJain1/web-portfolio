@@ -1,0 +1,21 @@
+{
+  "name": "DEV LAKSHAY Portfolio",
+  "short_name": "DEV LAKSHAY",
+  "description": "Portfolio of Lakshay Jain - Designer, Developer & Digital Storyteller",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#5C94FC",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
