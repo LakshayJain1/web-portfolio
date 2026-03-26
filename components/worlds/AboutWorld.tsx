@@ -8,10 +8,9 @@ export default function AboutWorld() {
   const config = WORLD_DATA['about'];
 
   return (
-    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2200), height: '100%', background: '#5C94FC' }}>
+    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2200), height: '100%' }}>
       <WorldTerrain 
          worldId="about"
-         theme="overworld" 
       />
       {/* About Board — slides in, acts as narrative checkpoint */}
       <div className="about-board" style={{ 

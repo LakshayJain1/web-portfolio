@@ -8,10 +8,9 @@ export default function ProjectsWorld() {
   const config = WORLD_DATA['projects'];
 
   return (
-    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 3500), height: '100%', background: '#1A0E00' }}>
+    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 3500), height: '100%' }}>
       <WorldTerrain 
          worldId="projects"
-         theme="night" 
       />
       
       {/* Title */}
@@ -24,7 +23,7 @@ export default function ProjectsWorld() {
           boxShadow: '8px 8px 0 rgba(0,0,0,0.5)'
         }}>
           <h1 style={{ fontFamily: '"Press Start 2P"', color: '#FAB278', fontSize: '20px', marginBottom: '16px'}}>
-            WORLD 1-4: PROJECTS
+            WORLD 1-3: PROJECTS
           </h1>
           <p style={{ fontFamily: '"Press Start 2P"', lineHeight: 2.2, fontSize: '9px', color: '#DDD'}}>
             Jump and hit the <span style={{color:'var(--coin)'}}>?</span> blocks from below to reveal projects!

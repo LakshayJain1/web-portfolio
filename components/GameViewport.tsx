@@ -4,6 +4,8 @@ import { useGame } from './GameContext';
 import Player from './Player';
 import { useState, useEffect, useCallback } from 'react';
 import { playUIConfirm } from './SoundManager';
+import { motion, AnimatePresence } from 'framer-motion';
+import { WORLD_DATA } from './GameConfig';
 
 import HeroWorld from './worlds/HeroWorld';
 import AboutWorld from './worlds/AboutWorld';
@@ -11,10 +13,7 @@ import ProjectsWorld from './worlds/ProjectsWorld';
 import ContactWorld from './worlds/ContactWorld';
 
 export default function GameViewport() {
-  const { activeWorld, activePopup, setActivePopup, isTransitioning } = useGame();
-  const [transitionState, setTransitionState] = useState<'idle' | 'out' | 'in'>('idle');
-  const [worldKey, setWorldKey] = useState(0);
-  const [prevWorld, setPrevWorld] = useState(activeWorld);
+  const { activeWorld, setActiveWorld, pendingWorld, activePopup, setActivePopup, gameState, setGameState } = useGame();
   const [pixelGrid, setPixelGrid] = useState<{ delay: number }[]>([]);
 
   // Generate pixel grid for wipe transition
@@ -36,26 +35,28 @@ export default function GameViewport() {
 
   // Handle world transition sequence
   useEffect(() => {
-    if (activeWorld !== prevWorld) {
-      setTransitionState('out');
-      
-      const timerOut = setTimeout(() => {
-        setWorldKey(k => k + 1);
-        setPrevWorld(activeWorld);
-        setTransitionState('in');
-        
-        const timerIn = setTimeout(() => {
-          setTransitionState('idle');
-        }, 600);
-        
-        return () => clearTimeout(timerIn);
+    if (gameState === 'exiting') {
+      // Wait for exit animation (pixel wipe)
+      const timer = setTimeout(() => {
+        setGameState('transitioning');
       }, 600);
-      
-      return () => {
-        clearTimeout(timerOut);
-      };
+      return () => clearTimeout(timer);
+    } else if (gameState === 'transitioning') {
+      if (pendingWorld) {
+        setActiveWorld(pendingWorld);
+      }
+      // Brief pause to ensure mount
+      const timer = setTimeout(() => {
+        setGameState('entering');
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (gameState === 'entering') {
+      const timer = setTimeout(() => {
+        setGameState('idle');
+      }, 600);
+      return () => clearTimeout(timer);
     }
-  }, [activeWorld, prevWorld]);
+  }, [gameState, pendingWorld, setActiveWorld, setGameState]);
 
   // Close modal on ESC
   useEffect(() => {
@@ -75,6 +76,16 @@ export default function GameViewport() {
     }
   }, [activePopup]);
 
+  const renderWorld = (worldName: string) => {
+    switch (worldName) {
+      case 'hero': return <HeroWorld key="hero" />;
+      case 'about': return <AboutWorld key="about" />;
+      case 'projects': return <ProjectsWorld key="projects" />;
+      case 'contact': return <ContactWorld key="contact" />;
+      default: return null;
+    }
+  };
+
   return (
     <div 
       id="viewport-wrapper"
@@ -86,7 +97,8 @@ export default function GameViewport() {
         top: 0,
         left: 0,
         zIndex: 0,
-        background: 'var(--sky, #5C94FC)'
+        background: WORLD_DATA[activeWorld]?.skyColor || 'var(--sky, #5C94FC)',
+        transition: 'background 0.5s ease-in-out'
       }}
     >
       <div 
@@ -100,22 +112,30 @@ export default function GameViewport() {
           willChange: 'transform',
         }}
       >
-        {/* Render previous world during exit transition to avoid sudden black screen */}
-        {(transitionState === 'out' ? prevWorld : activeWorld) === 'hero' && <HeroWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
-        {(transitionState === 'out' ? prevWorld : activeWorld) === 'about' && <AboutWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
-        {(transitionState === 'out' ? prevWorld : activeWorld) === 'projects' && <ProjectsWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
-        {(transitionState === 'out' ? prevWorld : activeWorld) === 'contact' && <ContactWorld key={worldKey + (transitionState === 'out' ? '_prev' : '')} />}
+        <AnimatePresence mode="wait">
+          {gameState !== 'transitioning' && (
+            <motion.div
+              key={activeWorld}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.1 }}
+            >
+              {renderWorld(activeWorld)}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <Player />
 
       {/* ─── Pixel Wipe Transition ─────────────────── */}
-      {transitionState !== 'idle' && (
+      {gameState !== 'idle' && (
         <div className="pixel-transition-overlay">
           {pixelGrid.map((cell, i) => (
             <div
               key={i}
-              className={`pixel-block ${transitionState === 'out' ? 'pixel-block-out' : 'pixel-block-in'}`}
+              className={`pixel-block ${gameState === 'exiting' ? 'pixel-block-out' : 'pixel-block-in'}`}
               style={{ animationDelay: `${cell.delay}s` }}
             />
           ))}
@@ -123,13 +143,13 @@ export default function GameViewport() {
       )}
 
       {/* ─── World Name Flash ──────────────────────── */}
-      {transitionState === 'in' && (
+      {gameState === 'entering' && (
         <div className="world-name-flash">
           <span className="world-name-badge">
             {activeWorld === 'hero' && 'WORLD 1-1'}
             {activeWorld === 'about' && 'WORLD 1-2'}
-            {activeWorld === 'projects' && 'WORLD 1-4'}
-            {activeWorld === 'contact' && 'WORLD 2-1'}
+            {activeWorld === 'projects' && 'WORLD 1-3'}
+            {activeWorld === 'contact' && 'WORLD 1-4'}
           </span>
         </div>
       )}

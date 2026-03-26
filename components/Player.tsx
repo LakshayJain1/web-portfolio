@@ -6,71 +6,116 @@ import { WORLD_DATA } from './GameConfig';
 import { playJump, playCoin, playPipeEnter, playPowerUp, playBlockBump } from './SoundManager';
 
 const P = {
-  R: '#E52020', S: '#FAB278', B: '#3060C8', W: '#FFFFFF', K: '#202020', Y: '#C08000', T: '#F07820', _: null as string | null,
+  R1: '#FF4D4D', // highlight
+  R2: '#E52020', // base
+  R3: '#9E1010', // shadow
+
+  S1: '#FFD6A5',
+  S2: '#FAB278',
+  S3: '#C68642',
+
+  B1: '#4A7BFF',
+  B2: '#3060C8',
+  B3: '#1E3F8A',
+
+  T1: '#F4A261',
+  T2: '#F07820',
+  T3: '#8C4A1A',
+
+  K: '#202020',
+  _: null as string | null,
 };
 
-const MARIO_FRAMES = [
-  [
-    [P._, P._, P._, P.R, P.R, P.R, P.R, P.R, P.R, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P._, P._, P._, P._],
-    [P._, P._, P.K, P.K, P.K, P.S, P.S, P.K, P.S, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P.K, P.S, P.K, P.S, P.S, P.S, P.K, P.S, P.S, P.S, P._, P._, P._, P._, P._],
-    [P._, P.K, P.S, P.K, P.K, P.S, P.S, P.S, P.K, P.S, P.S, P.S, P._, P._, P._, P._],
-    [P._, P._, P.S, P.S, P.S, P.S, P.S, P.S, P.S, P.S, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P._, P.B, P.B, P.T, P.B, P._, P._, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P.B, P.B, P.B, P.T, P.B, P.B, P.B, P._, P._, P._, P._, P._, P._, P._],
-    [P.B, P.B, P.B, P.B, P.T, P.T, P.T, P.B, P.B, P.B, P.B, P._, P._, P._, P._, P._],
-    [P.S, P.S, P.B, P.T, P.T, P.T, P.T, P.T, P.B, P.S, P.S, P._, P._, P._, P._, P._],
-    [P.S, P.S, P.S, P.T, P.T, P.T, P.T, P.T, P.S, P.S, P.S, P._, P._, P._, P._, P._],
-    [P._, P._, P.T, P.T, P.T, P._, P.T, P.T, P.T, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P.K, P.K, P.T, P._, P._, P._, P.T, P.K, P.K, P._, P._, P._, P._, P._, P._],
-    [P.K, P.K, P.K, P._, P._, P._, P._, P._, P.K, P.K, P.K, P._, P._, P._, P._, P._],
-  ],
-  [
-    [P._, P._, P._, P.R, P.R, P.R, P.R, P.R, P.R, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P._, P._, P._],
-    [P._, P._, P.K, P.K, P.K, P.S, P.S, P.K, P.S, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P.K, P.S, P.K, P.S, P.S, P.S, P.K, P.S, P.S, P.S, P._, P._, P._, P._, P._],
-    [P._, P.K, P.S, P.K, P.K, P.S, P.S, P.S, P.K, P.S, P.S, P.S, P._, P._, P._, P._],
-    [P._, P._, P.S, P.S, P.S, P.S, P.S, P.S, P.S, P.S, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P._, P.B, P.B, P.T, P.B, P._, P._, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P.B, P.B, P.B, P.T, P.B, P.B, P.B, P._, P._, P._, P._, P._, P._, P._],
-    [P.B, P.B, P.B, P.B, P.T, P.T, P.T, P.B, P.B, P.B, P.B, P._, P._, P._, P._, P._],
-    [P.S, P.S, P.B, P.T, P.T, P.T, P.T, P.T, P.B, P.S, P.S, P._, P._, P._, P._, P._],
-    [P.S, P.S, P.S, P.T, P.T, P.T, P.T, P.T, P.S, P.S, P.S, P._, P._, P._, P._, P._],
-    [P._, P._, P.T, P.T, P._, P._, P._, P.T, P.T, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P.K, P.T, P.K, P._, P._, P._, P.K, P.T, P.K, P._, P._, P._, P._, P._, P._],
-    [P.K, P.K, P._, P.K, P._, P._, P._, P.K, P._, P.K, P.K, P._, P._, P._, P._, P._],
-  ],
-  [
-    [P._, P._, P._, P.R, P.R, P.R, P.R, P.R, P.R, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P.R, P._, P._, P._],
-    [P._, P._, P.K, P.K, P.K, P.S, P.S, P.K, P.S, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P.K, P.S, P.K, P.S, P.S, P.S, P.K, P.S, P.S, P.S, P._, P._, P._, P._, P._],
-    [P._, P.K, P.S, P.K, P.K, P.S, P.S, P.S, P.K, P.S, P.S, P.S, P._, P._, P._, P._],
-    [P._, P._, P.S, P.S, P.S, P.S, P.S, P.S, P.S, P.S, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P._, P.B, P.B, P.T, P.B, P._, P._, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P._, P.B, P.B, P.T, P.T, P.T, P.B, P._, P._, P._, P._, P._, P._, P._, P._],
-    [P._, P.B, P.B, P.T, P.T, P.T, P.T, P.T, P.B, P.B, P._, P._, P._, P._, P._, P._],
-    [P._, P.B, P.T, P.T, P.T, P._, P.T, P.T, P.T, P.B, P._, P._, P._, P._, P._, P._],
-    [P._, P.T, P.T, P.T, P._, P._, P._, P.T, P.T, P.T, P._, P._, P._, P._, P._, P._],
-    [P._, P.T, P.T, P._, P._, P._, P._, P._, P.T, P.T, P._, P._, P._, P._, P._, P._],
-    [P.K, P.K, P._, P._, P._, P._, P._, P._, P._, P.K, P.K, P._, P._, P._, P._, P._],
-    [P.K, P.K, P._, P._, P._, P._, P._, P._, P._, P.K, P.K, P._, P._, P._, P._, P._],
-  ]
-];
+const SPRITE_SIZE = 24;
+const E = P._;
 
+const emptyRows = Array.from({ length: 9 }, () => Array(24).fill(E));
+
+const MARIO_FRAMES = [
+
+  // ================= IDLE =================
+  [
+    [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R2, P.R3, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.K, P.K, P.K, P.S1, P.S2, P.K, P.S2, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, P.K, P.S1, P.K, P.S2, P.S2, P.S2, P.K, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, P.K, P.S1, P.K, P.K, P.S2, P.S2, P.S2, P.K, P.S3, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, E, E, E, P.B1, P.B2, P.T2, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.B1, P.B2, P.B2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.B1, P.B2, P.B2, P.B2, P.T2, P.T2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, P.S1, P.S2, P.B2, P.T2, P.T2, P.T2, P.T2, P.T2, P.B2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.S1, P.S2, P.S2, P.T2, P.T2, P.T2, P.T2, P.T2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, E, P.T2, P.T2, P.T2, E, P.T2, P.T2, P.T3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.K, P.K, P.T2, E, E, E, P.T2, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [P.K, P.K, P.K, E, E, E, E, E, P.K, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    ...emptyRows,
+  ],
+
+  // ================= WALK 1 =================
+  [
+    [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R2, P.R3, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.K, P.K, P.K, P.S1, P.S2, P.K, P.S2, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, P.K, P.S1, P.K, P.S2, P.S2, P.S2, P.K, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, P.K, P.S1, P.K, P.K, P.S2, P.S2, P.S2, P.K, P.S3, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, E, E, E, P.B1, P.B2, P.T2, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.B1, P.B2, P.B2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.B1, P.B2, P.B2, P.B2, P.T2, P.T2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, P.S1, P.S2, P.B2, P.T2, P.T2, P.T2, P.T2, P.T2, P.B2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.S1, P.S2, P.S2, P.T2, P.T2, P.T2, P.T2, P.T2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, E, P.T2, P.T2, E, E, P.T2, P.T2, P.T3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.K, P.T2, P.K, E, E, E, P.K, P.T2, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [P.K, P.K, E, P.K, E, E, E, P.K, E, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    ...emptyRows,
+  ],
+
+  // ================= WALK 2 =================
+  [
+    [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R2, P.R3, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.K, P.K, P.K, P.S1, P.S2, P.K, P.S2, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, P.K, P.S1, P.K, P.S2, P.S2, P.S2, P.K, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, P.K, P.S1, P.K, P.K, P.S2, P.S2, P.S2, P.K, P.S3, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, E, E, E, P.B1, P.B2, P.T2, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, E, E, P.B1, P.B2, P.B2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.B1, P.B2, P.B2, P.B2, P.T2, P.T2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, P.S1, P.S2, P.B2, P.T2, P.T2, P.T2, P.T2, P.T2, P.B2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.S1, P.S2, P.S2, P.T2, P.T2, P.T2, P.T2, P.T2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    [E, E, P.T2, P.T2, P.T2, E, E, P.T2, P.T3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [E, P.K, P.K, P.T2, E, E, E, E, P.T2, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E],
+    [P.K, P.K, P.K, E, E, E, E, E, E, P.K, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E],
+
+    ...emptyRows,
+  ],
+];
 function drawMarioFrame(
   ctx: CanvasRenderingContext2D,
   frame: number,
   scale: number,
   flipX: boolean
 ) {
-  ctx.clearRect(0, 0, 16 * scale, 16 * scale);
+  ctx.clearRect(0, 0, SPRITE_SIZE * scale, SPRITE_SIZE * scale);
   const pixels = MARIO_FRAMES[frame % MARIO_FRAMES.length];
   ctx.save();
   if (flipX) {
-    ctx.translate(16 * scale, 0);
+    ctx.translate(SPRITE_SIZE * scale, 0);
     ctx.scale(-1, 1);
   }
   pixels.forEach((row, ry) => {
@@ -83,19 +128,28 @@ function drawMarioFrame(
   ctx.restore();
 }
 
-// Mario hitbox: 64x64 (16px * 4 scale)
-const MARIO_W = 64;
-const MARIO_H = 64;
+// Mario hitbox: 40x56 (roughly 1.25x1.75 blocks)
+const MARIO_W = 40;
+const MARIO_H = 56;
 const PIPE_TOP_W = 40;
 const PIPE_BODY_W = 32;
 const PIPE_H = 74;
 const BLOCK_SIZE = 32;
 
+function isColliding(r1: { x: number; y: number; w: number; h: number }, r2: { x: number; y: number; w: number; h: number }) {
+  return r1.x < r2.x + r2.w && r1.x + r1.w > r2.x && r1.y < r2.y + r2.h && r1.y + r1.h > r2.y;
+}
+
 export default function Player() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { activeWorld, setActiveWorld, collectCoin, setActivePopup, isTransitioning, setIsTransitioning, dismissOnboarding } = useGame();
-  
+  const {
+    activeWorld, setActiveWorld, collectCoin, setActivePopup,
+    gameState, setGameState, triggerNavigation,
+    lives, setLives, powerUpEffect, setPowerUpEffect,
+    dismissOnboarding
+  } = useGame();
+
   const state = useRef({
     x: 100,
     y: 0,
@@ -109,6 +163,8 @@ export default function Player() {
     pipeEnterTimer: 0,
     hasPlayedPipeSound: false,
     cameraX: 0,
+    invulnerableTimer: 0,
+    knockbackTimer: 0,
   });
 
   const keys = useRef({
@@ -166,10 +222,10 @@ export default function Player() {
 
       const viewport = document.getElementById('viewport-wrapper');
       const H = viewport ? viewport.clientHeight : window.innerHeight;
-      const GROUND_Y = H - 128;
+      
       // TERRAIN_GROUND matches WorldTerrain's groundY (H - 64) — where ground tiles are drawn
-      // All pipe/block/coin yOffsets in GameConfig are relative to this line
-      const TERRAIN_GROUND = GROUND_Y + MARIO_H; // = H - 64
+      const TERRAIN_GROUND = H - 64;
+      const GROUND_Y = TERRAIN_GROUND - MARIO_H;
 
       if (!started) {
         s.x = WORLD_DATA[activeWorld]?.startX || 100;
@@ -194,14 +250,13 @@ export default function Player() {
         }
         s.pipeEnterTimer += dt;
         s.y += 120 * dt;
-        
+
         if (s.pipeEnterTimer > 0.6) {
           const pipes = config.pipes || [];
           const hitPipe = pipes.find(p => Math.abs(s.x + MARIO_W / 2 - (p.x + PIPE_BODY_W / 2)) < 50);
           if (hitPipe) {
-            setIsTransitioning(true);
+            triggerNavigation(hitPipe.to);
             setTimeout(() => {
-              setActiveWorld(hitPipe.to);
               const nextConfig = WORLD_DATA[hitPipe.to];
               s.x = nextConfig?.startX || 100;
               s.y = GROUND_Y;
@@ -211,8 +266,7 @@ export default function Player() {
               s.pipeEnterTimer = 0;
               s.hasPlayedPipeSound = false;
               started = false;
-              setTimeout(() => setIsTransitioning(false), 800);
-            }, 500);
+            }, 300);
           } else {
             s.animState = 'idle';
             s.y = GROUND_Y;
@@ -220,7 +274,7 @@ export default function Player() {
             s.hasPlayedPipeSound = false;
           }
         }
-      } else if (!isTransitioning) {
+      } else if (gameState === 'idle') {
         // ─── Check pipe entry ────────────────────
         const pipes = config.pipes || [];
         let onTopOfPipe: typeof pipes[0] | null = null;
@@ -229,7 +283,7 @@ export default function Player() {
           const pipeCenterX = p.x + PIPE_BODY_W / 2;
           const marioCenterX = s.x + MARIO_W / 2;
           const distX = Math.abs(marioCenterX - pipeCenterX);
-          
+
           // Enter pipe if: near pipe horizontally AND (on ground or on top of pipe) AND not jumping
           const onGround = Math.abs(s.y - GROUND_Y) < 6;
           const onPipeTop = Math.abs((s.y + MARIO_H) - pipeVisualTop) < 10;
@@ -250,14 +304,18 @@ export default function Player() {
 
         if (s.animState !== 'pipe_enter') {
           // ─── Horizontal movement ───────────────
-          if (K.ArrowRight) {
-            s.vx = SPEED;
-            s.dir = 1;
-          } else if (K.ArrowLeft) {
-            s.vx = -SPEED;
-            s.dir = -1;
+          if (s.knockbackTimer > 0) {
+            s.knockbackTimer -= dt;
           } else {
-            s.vx = 0;
+            if (K.ArrowRight) {
+              s.vx = SPEED;
+              s.dir = 1;
+            } else if (K.ArrowLeft) {
+              s.vx = -SPEED;
+              s.dir = -1;
+            } else {
+              s.vx = 0;
+            }
           }
 
           // ─── Jump ──────────────────────────────
@@ -280,7 +338,7 @@ export default function Player() {
             const pipeVisualTop = TERRAIN_GROUND - PIPE_H;
             const pipeLeft = p.x - 4;
             const pipeRight = p.x + PIPE_BODY_W + 4;
-            
+
             // Only block if Mario's bottom is below pipe top (walking beside it)
             if (s.y + MARIO_H > pipeVisualTop + 4) {
               if (nextX + MARIO_W > pipeLeft && nextX < pipeRight) {
@@ -327,18 +385,48 @@ export default function Player() {
                 if (nextY < bBottom && s.y >= bBottom - 8) {
                   nextY = bBottom;
                   s.vy = 0;
-                  
+
                   if (!b.hit) {
                     b.hit = true;
                     b.bounceTime = performance.now();
                     playBlockBump();
-                    
+
                     if (b.project) {
                       playPowerUp();
                       setTimeout(() => {
                         setActivePopup(b.project!);
                       }, 400);
                     }
+                  }
+                }
+              }
+            }
+
+            const powerBoxes = config.powerUpBoxes || [];
+            for (const b of powerBoxes) {
+              const bTop = TERRAIN_GROUND - b.yOffset;
+              const bBottom = bTop + BLOCK_SIZE;
+              const bLeft = b.x;
+              const bRight = b.x + BLOCK_SIZE;
+
+              if (s.x + MARIO_W > bLeft && s.x < bRight) {
+                if (nextY < bBottom && s.y >= bBottom - 8) {
+                  nextY = bBottom;
+                  s.vy = 0;
+                  if (!b.hit) {
+                    b.hit = true;
+                    b.bounceTime = performance.now();
+                    playBlockBump();
+                    playPowerUp();
+                    // Spawn power-up effect after short delay
+                    setTimeout(() => {
+                      if (b.powerUp === 'mushroom') {
+                        setLives(prev => Math.min(prev + 1, 99));
+                      } else if (b.powerUp === 'flower') {
+                        setPowerUpEffect('flower');
+                        setTimeout(() => setPowerUpEffect('none'), 10000);
+                      }
+                    }, 300);
                   }
                 }
               }
@@ -379,13 +467,55 @@ export default function Player() {
           for (const c of coins) {
             if (!c.collected) {
               const cY = TERRAIN_GROUND - c.yOffset;
-              if (s.x + MARIO_W > c.x && s.x < c.x + 32 && 
-                  s.y + MARIO_H > cY && s.y < cY + 32) {
+              if (s.x + MARIO_W > c.x && s.x < c.x + 32 &&
+                s.y + MARIO_H > cY && s.y < cY + 32) {
                 c.collected = true;
                 c.popTime = performance.now();
                 playCoin();
                 // pop.x needs to be screen relative: worldX + cameraOffset
                 collectCoin(c.x + s.cameraX, cY);
+              }
+            }
+          }
+
+          // ─── Enemy collision ────────────────────
+          if (s.invulnerableTimer > 0) {
+            s.invulnerableTimer -= dt;
+          }
+
+          const enemies = config.enemies || [];
+          for (const e of enemies) {
+            if (e.isDead) continue;
+
+            const eY = TERRAIN_GROUND - e.yOffset - 32; // Assume enemy height 32
+            const playerRect = { x: s.x + 8, y: s.y + 8, w: MARIO_W - 16, h: MARIO_H - 16 };
+            const enemyRect = { x: e.x, y: eY, w: 32, h: 32 };
+
+            if (isColliding(playerRect, enemyRect)) {
+              // Stomp check
+              if (s.vy > 0 && s.y + MARIO_H < eY + 16) {
+                e.isDead = true;
+                s.vy = -400; // Bounce up
+                playBlockBump();
+              } else if (s.invulnerableTimer <= 0) {
+                // Hit by enemy
+                setLives(prev => {
+                  const next = prev - 1;
+                  if (next <= 0) {
+                    // Game Over - reset
+                    triggerNavigation('hero');
+                    setTimeout(() => {
+                      s.x = 100;
+                      s.y = GROUND_Y;
+                      setLives(5);
+                    }, 500);
+                  }
+                  return next;
+                });
+                s.invulnerableTimer = 2; // 2 seconds invulnerability
+                s.knockbackTimer = 0.4;
+                s.vx = s.x < e.x ? -SPEED : SPEED;
+                s.vy = -300;
               }
             }
           }
@@ -397,7 +527,7 @@ export default function Player() {
 
           // ─── End-of-contact-world wrap ─────────
           if (activeWorld === 'contact' && s.x >= config.width - 200) {
-            setActiveWorld('hero');
+            triggerNavigation('hero');
             s.x = WORLD_DATA['hero'].startX;
             s.y = GROUND_Y;
             s.vx = 0;
@@ -424,7 +554,21 @@ export default function Player() {
 
       // ─── Draw Mario ───────────────────────────
       const frame = s.animState === 'jump' ? 2 : (s.animState === 'walk' ? s.walkFrame % 3 : 0);
-      drawMarioFrame(ctx, frame, 4, s.dir === -1);
+
+      // Blink if invulnerable
+      if (s.invulnerableTimer > 0 && Math.floor(time / 100) % 2 === 0) {
+        // Skip drawing
+      } else {
+        drawMarioFrame(ctx, frame, SCALE, s.dir === -1);
+
+        // Add flower aura if active
+        if (powerUpEffect === 'flower') {
+          ctx.strokeStyle = '#FFD700';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.strokeRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        }
+      }
 
       // ─── Camera ───────────────────────────────
       if (containerRef.current) {
@@ -438,8 +582,10 @@ export default function Player() {
           worldContainer.style.transform = `translateX(${targetCameraX}px)`;
         }
         s.cameraX = targetCameraX;
-
-        containerRef.current.style.transform = `translate(${s.x + targetCameraX}px, ${s.y}px)`;
+        const offsetX = (MARIO_W - CANVAS_SIZE) / 2;
+        const offsetY = (MARIO_H - CANVAS_SIZE) / 2;
+        containerRef.current.style.transform =
+          `translate(${s.x + targetCameraX + offsetX}px, ${s.y + offsetY}px)`
       }
 
       animationId = requestAnimationFrame(loop);
@@ -447,8 +593,9 @@ export default function Player() {
 
     animationId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animationId);
-  }, [collectCoin, activeWorld, setActiveWorld, setActivePopup, isTransitioning, setIsTransitioning, dismissOnboarding]);
-
+  }, [collectCoin, activeWorld, setActiveWorld, setActivePopup, gameState, triggerNavigation, dismissOnboarding]);
+  const SCALE = 4;
+  const CANVAS_SIZE = SPRITE_SIZE * SCALE;
   return (
     <div
       ref={containerRef}
@@ -456,16 +603,16 @@ export default function Player() {
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '64px',
-        height: '64px',
+        width: `${MARIO_W}px`,
+        height: `${MARIO_H}px`,
         zIndex: 1000,
         willChange: 'transform'
       }}
     >
       <canvas
         ref={canvasRef}
-        width={64}
-        height={64}
+        width={CANVAS_SIZE}
+        height={CANVAS_SIZE}
         style={{ display: 'block' }}
       />
     </div>

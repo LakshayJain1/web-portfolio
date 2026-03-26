@@ -10,6 +10,9 @@ interface CoinPop {
   text: string;
 }
 
+export type GameState = "idle" | "exiting" | "transitioning" | "entering";
+export type PowerUpEffect = "none" | "flower";
+
 interface GameContextType {
   coins: number;
   score: number;
@@ -18,10 +21,16 @@ interface GameContextType {
   addScore: (pts: number) => void;
   activeWorld: string;
   setActiveWorld: (world: string) => void;
+  pendingWorld: string | null;
   activePopup: ProjectData | null;
   setActivePopup: (popup: ProjectData | null) => void;
-  isTransitioning: boolean;
-  setIsTransitioning: (v: boolean) => void;
+  gameState: GameState;
+  setGameState: (state: GameState) => void;
+  triggerNavigation: (targetWorld: string) => void;
+  lives: number;
+  setLives: (v: number | ((prev: number) => number)) => void;
+  powerUpEffect: PowerUpEffect;
+  setPowerUpEffect: (effect: PowerUpEffect) => void;
   isMuted: boolean;
   toggleMute: () => void;
   onboardingDismissed: boolean;
@@ -35,8 +44,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [score, setScore] = useState(0);
   const [coinPops, setCoinPops] = useState<CoinPop[]>([]);
   const [activeWorld, setActiveWorld] = useState('hero');
+  const [pendingWorld, setPendingWorld] = useState<string | null>(null);
   const [activePopup, setActivePopup] = useState<ProjectData | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [gameState, setGameState] = useState<GameState>('idle');
+  const [lives, setLives] = useState(5);
+  const [powerUpEffect, setPowerUpEffect] = useState<PowerUpEffect>('none');
   const [isMuted, setIsMuted] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('mario-muted') === 'true';
@@ -57,6 +69,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const dismissOnboarding = useCallback(() => {
     setOnboardingDismissed(true);
+  }, []);
+
+  const triggerNavigation = useCallback((targetWorld: string) => {
+    setPendingWorld(targetWorld);
+    setGameState('exiting');
   }, []);
 
   const collectCoin = useCallback((worldX: number, worldY: number) => {
@@ -99,9 +116,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
   return (
     <GameContext.Provider value={{ 
       coins, score, coinPops, collectCoin, addScore, 
-      activeWorld, setActiveWorld, 
+      activeWorld, setActiveWorld, pendingWorld,
       activePopup, setActivePopup, 
-      isTransitioning, setIsTransitioning,
+      gameState, setGameState, triggerNavigation,
+      lives, setLives,
+      powerUpEffect, setPowerUpEffect,
       isMuted, toggleMute,
       onboardingDismissed, dismissOnboarding
     }}>

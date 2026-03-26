@@ -4,7 +4,7 @@ import { useGame } from './GameContext';
 import { toggleMute } from './SoundManager';
 
 export default function Navbar() {
-  const { score, coins, activeWorld, isMuted, toggleMute: ctxToggle } = useGame();
+  const { score, coins, lives, activeWorld, isMuted, toggleMute: ctxToggle } = useGame();
 
   const handleMuteToggle = () => {
     toggleMute();
@@ -14,8 +14,8 @@ export default function Navbar() {
   const worldNames: Record<string, string> = {
     hero: 'WORLD 1-1',
     about: 'WORLD 1-2',
-    projects: 'WORLD 1-4',
-    contact: 'WORLD 2-1',
+    projects: 'WORLD 1-3',
+    contact: 'WORLD 1-4',
   };
 
   return (
@@ -57,6 +57,12 @@ export default function Navbar() {
             {String(score).padStart(6, '0')}
           </span>
           <span style={{ fontSize: '7px', color: '#888' }}>SCORE</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+          <span style={{ color: '#E52020', fontSize: '10px' }}>
+            ×{String(lives).padStart(2, '0')}
+          </span>
+          <span style={{ fontSize: '7px', color: '#888' }}>LIVES</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
           <span style={{ color: 'var(--coin)', fontSize: '10px' }}>

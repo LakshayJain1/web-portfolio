@@ -13,7 +13,6 @@ export default function HeroWorld() {
     <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2000), height: '100%' }}>
       <WorldTerrain 
          worldId="hero"
-         theme="overworld" 
       />
       
       {/* Title Card */}

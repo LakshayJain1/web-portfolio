@@ -18,10 +18,9 @@ export default function ContactWorld() {
   };
 
   return (
-    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2000), height: '100%', background: '#000020' }}>
+    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2000), height: '100%' }}>
       <WorldTerrain
         worldId="contact"
-        theme="underground"
       />
       <div style={{
         position: 'absolute', top: '8%', left: 300, color: '#FFF', width: '700px', zIndex: 10,
@@ -36,7 +35,7 @@ export default function ContactWorld() {
           border: '3px solid #000'
         }}>
           <span style={{ fontFamily: '"Press Start 2P"', color: '#FFF', fontSize: '8px', letterSpacing: '1px' }}>
-            WORLD 2-1
+            WORLD 1-4
           </span>
         </div>
         

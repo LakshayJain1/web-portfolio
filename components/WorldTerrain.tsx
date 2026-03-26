@@ -25,6 +25,16 @@ export function drawTile(ctx: CanvasRenderingContext2D, x: number, y: number, ty
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, TILE, TILE);
+  } else if (type === 'ground_green') {
+    ctx.fillStyle = '#109010';
+    ctx.fillRect(x, y, TILE, TILE);
+    ctx.fillStyle = '#087008';
+    ctx.fillRect(x, y + TILE - 6, TILE, 6);
+    ctx.fillStyle = '#30C030';
+    ctx.fillRect(x, y, TILE, 6);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, TILE, TILE);
   } else if (type === 'qblock') {
     ctx.fillStyle = '#E8A000';
     ctx.fillRect(x, y, TILE, TILE);
@@ -121,6 +131,55 @@ function drawPowerUpStar(ctx: CanvasRenderingContext2D, x: number, y: number, pr
   ctx.restore();
 }
 
+function drawEnemy(ctx: CanvasRenderingContext2D, x: number, y: number, type: string, isDead: boolean) {
+  const TILE = 32;
+  if (isDead) {
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x, y + 20, TILE, 12);
+    return;
+  }
+  
+  if (type === 'goomba') {
+    ctx.fillStyle = '#8B4513'; // Head
+    ctx.fillRect(x, y, TILE, 24);
+    ctx.fillStyle = '#D2B48C'; // Body
+    ctx.fillRect(x + 4, y + 24, TILE - 8, 8);
+    ctx.fillStyle = '#FFF'; // Eyes
+    ctx.fillRect(x + 6, y + 6, 6, 6);
+    ctx.fillRect(x + 20, y + 6, 6, 6);
+  } else if (type === 'koopa') {
+    ctx.fillStyle = '#00A800'; // Shell
+    ctx.fillRect(x, y + 8, TILE, 24);
+    ctx.fillStyle = '#FFF'; // Belly
+    ctx.fillRect(x + 4, y + 20, TILE - 8, 12);
+  }
+}
+
+function drawMushroom(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = '#FF0000';
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 16, 16, Math.PI, 0);
+  ctx.fill();
+  ctx.fillStyle = '#FFF';
+  ctx.fillRect(x + 8, y + 8, 6, 6);
+  ctx.fillRect(x + 18, y + 8, 6, 6);
+  ctx.fillStyle = '#F5DEB3';
+  ctx.fillRect(x + 8, y + 24, 16, 8);
+}
+
+function drawFlower(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = '#00A800'; // Stem
+  ctx.fillRect(x + 14, y + 16, 4, 16);
+  ctx.fillStyle = '#FF8C00'; // Petals
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 16, 12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#FFF'; // Center
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 16, 6, 0, Math.PI * 2);
+  ctx.fill();
+}
+
 export function drawCloud(ctx: CanvasRenderingContext2D, x: number, y: number) {
   ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
   ([[20, 24, 48, 20], [28, 12, 28, 20], [10, 20, 28, 20], [44, 18, 22, 18]] as [number, number, number, number][]).forEach(([rx, ry, rw, rh]) => {
@@ -147,10 +206,9 @@ export function drawHill(ctx: CanvasRenderingContext2D, x: number, y: number, r:
 
 interface WorldTerrainProps {
   worldId: string;
-  theme?: 'overworld' | 'underground' | 'night';
 }
 
-export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerrainProps) {
+export default function WorldTerrain({ worldId }: WorldTerrainProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -180,15 +238,15 @@ export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerr
       }
 
       // Draw clouds if not underground
-      if (theme !== 'underground') {
+      if (config.theme !== 'underground') {
         for (let cx = 100; cx < config.width; cx += 500) {
           drawCloud(ctx, ((cx - t * 20) % (config.width) + config.width) % config.width, H * 0.15 + (Math.sin(cx) * 20));
         }
       }
 
-      // Draw hills if overworld
+      // Draw hills if overworld or forest
       const groundY = H - 64;
-      if (theme === 'overworld') {
+      if (config.theme === 'overworld' || config.theme === 'forest') {
         for (let hx = 300; hx < config.width; hx += 800) {
           drawHill(ctx, hx, groundY, 60 + (hx % 40));
         }
@@ -196,7 +254,7 @@ export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerr
 
       // Draw ground
       const TILE = 32;
-      const groundType = theme === 'underground' ? 'ground_blue' : 'ground';
+      const groundType = config.groundType;
       for (let gx = 0; gx < config.width; gx += TILE) {
         drawTile(ctx, gx, groundY, groundType);
         drawTile(ctx, gx, groundY + TILE, groundType);
@@ -242,6 +300,48 @@ export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerr
         });
       }
 
+      // Draw power-up boxes
+      if (config.powerUpBoxes) {
+        config.powerUpBoxes.forEach(b => {
+          let bounceOffset = 0;
+          if (b.bounceTime) {
+            const elapsed = (now - b.bounceTime) / 1000;
+            if (elapsed < 0.3) {
+              bounceOffset = Math.sin(elapsed / 0.3 * Math.PI) * -12;
+            }
+          }
+          const blockType = b.hit ? 'qblock_hit' : 'qblock';
+          drawTile(ctx, b.x, groundY - b.yOffset + bounceOffset, blockType);
+
+          if (b.hit && b.bounceTime) {
+            const elapsed = (now - b.bounceTime) / 1000;
+            if (elapsed < 1.0) {
+              const itemY = groundY - b.yOffset - Math.min(elapsed * 40, 32);
+              if (b.powerUp === 'mushroom') drawMushroom(ctx, b.x, itemY);
+              else drawFlower(ctx, b.x, itemY);
+            }
+          }
+        });
+      }
+
+      // Draw enemies
+      if (config.enemies) {
+        config.enemies.forEach(e => {
+          // Add simple movement logic here
+          if (!e.isDead) {
+            e.x += e.dir * 40 * 0.016; // 40px/s roughly
+            // Check world bounds or pipes for turn
+            if (e.x < 0 || e.x > config.width - 32) e.dir *= -1;
+            
+            // Turn at pipes
+            (config.pipes || []).forEach(p => {
+              if (Math.abs(e.x - p.x) < 32) e.dir *= -1;
+            });
+          }
+          drawEnemy(ctx, e.x, groundY - e.yOffset - 32, e.type, !!e.isDead);
+        });
+      }
+
       // Draw coins with bobbing + pop animation
       if (config.coins) {
         config.coins.forEach(c => {
@@ -275,7 +375,7 @@ export default function WorldTerrain({ worldId, theme = 'overworld' }: WorldTerr
 
     animationId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animationId);
-  }, [worldId, theme]);
+  }, [worldId]);
 
   return (
     <canvas
