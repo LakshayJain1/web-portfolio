@@ -381,7 +381,7 @@ export default function WorldTerrain({ worldId }: WorldTerrainProps) {
     <canvas
       ref={canvasRef}
       width={WORLD_DATA[worldId]?.width || 1500}
-      style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+      className="absolute top-0 left-0 z-0"
     />
   );
 }

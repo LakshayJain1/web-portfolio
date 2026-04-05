@@ -89,28 +89,14 @@ export default function GameViewport() {
   return (
     <div 
       id="viewport-wrapper"
+      className="fixed inset-0 overflow-hidden z-0 transition-colors duration-500"
       style={{ 
-        width: '100vw', 
-        height: '100vh', 
-        overflow: 'hidden', 
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 0,
         background: WORLD_DATA[activeWorld]?.skyColor || 'var(--sky, #5C94FC)',
-        transition: 'background 0.5s ease-in-out'
       }}
     >
       <div 
         id="world-container"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          height: '100%',
-          width: 'max-content',
-          willChange: 'transform',
-        }}
+        className="absolute inset-y-0 left-0 w-max will-change-transform"
       >
         <AnimatePresence mode="wait">
           {gameState !== 'transitioning' && (
@@ -120,6 +106,7 @@ export default function GameViewport() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
+              className="h-full w-full"
             >
               {renderWorld(activeWorld)}
             </motion.div>

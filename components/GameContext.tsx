@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from 'react';
-import { ProjectData } from './GameConfig';
+import { ProjectData, resetAllWorlds } from './GameConfig';
 
 interface CoinPop {
   id: number;
@@ -35,6 +35,7 @@ interface GameContextType {
   toggleMute: () => void;
   onboardingDismissed: boolean;
   dismissOnboarding: () => void;
+  fullReset: () => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -56,6 +57,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
     return false;
   });
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+
+  const fullReset = useCallback(() => {
+    resetAllWorlds();
+    setCoins(0);
+    setScore(0);
+    setLives(5);
+    setPowerUpEffect('none');
+  }, []);
 
   const toggleMute = useCallback(() => {
     setIsMuted(prev => {
@@ -122,12 +131,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
       lives, setLives,
       powerUpEffect, setPowerUpEffect,
       isMuted, toggleMute,
-      onboardingDismissed, dismissOnboarding
+      onboardingDismissed, dismissOnboarding,
+      fullReset
     }}>
       {children}
     </GameContext.Provider>
   );
 }
+
 
 export function useGame() {
   const context = useContext(GameContext);

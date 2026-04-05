@@ -1,6 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-sky: #5C94FC;
+  --color-ground: #C84C0C;
+  --color-ground-dark: #8B2500;
+  --color-ground-light: #FF8C40;
+  --color-pipe: #00A800;
+  --color-pipe-dark: #006400;
+  --color-brick: #C84C0C;
+  --color-question: #E8A000;
+  --color-coin: #FFD700;
+  --color-mario-red: #E52020;
+  --color-mario-skin: #FAB278;
+  --color-mario-blue: #3060C8;
+  --color-mario-brown: #6B3A00;
+  --color-underground: #000068;
+  --color-castle: #808080;
+  --font-press-start: "Press Start 2P", monospace;
+  
+  --animate-onboarding-pulse: onboardingPulse 2s ease-in-out infinite;
+  --animate-onboarding-fade-in: onboardingFadeIn 0.5s ease-out;
+  --animate-onboarding-fade-out: onboardingFadeOut 0.5s ease-out forwards;
+}
+
 :root {
   --sky: #5C94FC;
   --ground: #C84C0C;

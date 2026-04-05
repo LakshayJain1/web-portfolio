@@ -19,123 +19,55 @@ export default function Navbar() {
   };
 
   return (
-    <nav
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        background: 'rgba(0, 0, 0, 0.92)',
-        borderBottom: '3px solid var(--coin)',
-        zIndex: 3000,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '10px 24px',
-        backdropFilter: 'blur(4px)',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ color: 'var(--coin)', fontSize: '10px', letterSpacing: '1px' }}>
+    <nav className="fixed top-0 left-0 right-0 bg-black/92 border-b-3 border-coin z-[3000] flex items-center justify-between px-12 py-48 backdrop-blur-sm">
+      <div className="flex items-center gap-4">
+        <div className="text-coin text-[10px] tracking-wider uppercase">
           ★ DEV LAKSHAY
         </div>
-        <div style={{ 
-          color: '#5CF', 
-          fontSize: '8px', 
-          background: 'rgba(85,204,255,0.1)', 
-          border: '1px solid rgba(85,204,255,0.3)',
-          padding: '4px 10px',
-          letterSpacing: '1px'
-        }}>
+        <div className="text-[#5CF] text-[8px] bg-[#55ccff1a] border border-[#55ccff4d] px-2.5 py-1 tracking-wider font-press-start">
           {worldNames[activeWorld] || 'WORLD 1-1'}
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', fontSize: '8px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-          <span style={{ color: 'var(--coin)', fontSize: '10px' }}>
+      <div className="flex items-center gap-5 text-[8px]">
+        <div className="flex flex-col items-center gap-0.5">
+          <span className="text-coin text-[10px] font-press-start">
             {String(score).padStart(6, '0')}
           </span>
-          <span style={{ fontSize: '7px', color: '#888' }}>SCORE</span>
+          <span className="text-[7px] text-[#888] font-press-start uppercase">Score</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-          <span style={{ color: '#E52020', fontSize: '10px' }}>
+        <div className="flex flex-col items-center gap-0.5">
+          <span className="text-mario-red text-[10px] font-press-start">
             ×{String(lives).padStart(2, '0')}
           </span>
-          <span style={{ fontSize: '7px', color: '#888' }}>LIVES</span>
+          <span className="text-[7px] text-[#888] font-press-start uppercase">Lives</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-          <span style={{ color: 'var(--coin)', fontSize: '10px' }}>
+        <div className="flex flex-col items-center gap-0.5">
+          <span className="text-coin text-[10px] font-press-start">
             ×{String(coins).padStart(2, '0')}
           </span>
-          <span style={{ fontSize: '7px', color: '#888' }}>COINS</span>
+          <span className="text-[7px] text-[#888] font-press-start uppercase">Coins</span>
         </div>
-        <button 
-          className="mute-btn"
+        <button
+          className="flex items-center justify-center w-8 h-8 p-0 relative border-2 border-[#333] bg-[#111] rounded-[2px] transition-colors hover:border-coin"
           onClick={handleMuteToggle}
           title={isMuted ? 'Unmute' : 'Mute'}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '32px',
-            height: '32px',
-            padding: '0',
-            position: 'relative',
-            border: '2px solid #333',
-            background: '#111',
-            borderRadius: '2px'
-          }}
         >
           {/* Retro Speaker Icon */}
-          <div style={{
-            width: '16px',
-            height: '14px',
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
+          <div className="w-4 h-3.5 relative flex items-center">
             {/* Speaker body */}
-            <div style={{
-              width: '6px',
-              height: '6px',
-              background: isMuted ? '#666' : 'var(--coin)',
-              position: 'relative',
-              zIndex: 2
-            }} />
+            <div className={`w-1.5 h-1.5 relative z-10 ${isMuted ? 'bg-[#666]' : 'bg-coin'}`} />
             {/* Speaker cone */}
-            <div style={{
-              width: '0',
-              height: '0',
-              borderTop: '7px solid transparent',
-              borderBottom: '7px solid transparent',
-              borderRight: `10px solid ${isMuted ? '#666' : 'var(--coin)'}`,
-              marginLeft: '-2px'
-            }} />
+            <div
+              className={`w-0 h-0 border-y-[7px] border-y-transparent border-r-[10px] -ml-0.5 ${isMuted ? 'border-r-[#666]' : 'border-r-coin'}`}
+            />
             {/* Sound waves (if not muted) */}
             {!isMuted && (
-              <div style={{
-                position: 'absolute',
-                right: '-4px',
-                width: '6px',
-                height: '10px',
-                borderRight: '2px solid var(--coin)',
-                borderRadius: '50% 0 0 50%',
-                transform: 'rotate(180deg)'
-              }} />
+              <div className="absolute -right-1 w-1.5 h-2.5 border-r-2 border-coin rounded-l-full rotate-180" />
             )}
             {/* Mute slash */}
             {isMuted && (
-              <div style={{
-                position: 'absolute',
-                left: '-2px',
-                top: '6px',
-                width: '20px',
-                height: '2px',
-                background: '#E52020',
-                transform: 'rotate(45deg)',
-                zIndex: 3
-              }} />
+              <div className="absolute -left-0.5 top-1.5 w-5 h-0.5 bg-mario-red rotate-45 z-20" />
             )}
           </div>
         </button>

@@ -56,6 +56,29 @@ export interface WorldConfig {
   groundType: 'ground' | 'ground_blue' | 'ground_green';
 }
 
+export function resetAllWorlds() {
+  Object.values(WORLD_DATA).forEach(world => {
+    world.blocks?.forEach(b => {
+      delete b.hit;
+      delete b.bounceTime;
+    });
+    world.powerUpBoxes?.forEach(b => {
+      delete b.hit;
+      delete b.bounceTime;
+      delete b.isUsed;
+    });
+    world.coins?.forEach(c => {
+      delete c.collected;
+      delete c.popTime;
+    });
+    world.enemies?.forEach(e => {
+      delete e.isDead;
+      // Reset enemy position to original if possible (assuming x is starting x)
+      // Actually we don't have starting x separate, but let's at least revive them
+    });
+  });
+}
+
 export const WORLD_DATA: Record<string, WorldConfig> = {
   hero: { 
     width: 2000, 

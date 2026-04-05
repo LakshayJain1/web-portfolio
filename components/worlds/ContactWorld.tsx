@@ -18,71 +18,64 @@ export default function ContactWorld() {
   };
 
   return (
-    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2000), height: '100%' }}>
+    <div 
+      className="relative h-full overflow-hidden"
+      style={{ width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2000) }}
+    >
       <WorldTerrain
         worldId="contact"
       />
-      <div style={{
-        position: 'absolute', top: '8%', left: 300, color: '#FFF', width: '700px', zIndex: 10,
-        background: 'rgba(0,0,32,0.92)', border: '4px solid #FAB278',
-        padding: '32px', boxShadow: '12px 12px 0px rgba(0,0,0,0.5)'
-      }}>
-        <div style={{ 
-          background: 'var(--mario-red)', 
-          display: 'inline-block', 
-          padding: '6px 14px', 
-          marginBottom: '16px',
-          border: '3px solid #000'
-        }}>
-          <span style={{ fontFamily: '"Press Start 2P"', color: '#FFF', fontSize: '8px', letterSpacing: '1px' }}>
+      <div className="absolute top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-white w-[min(90vw,700px)] z-10 bg-[#000020]/92 border-4 border-mario-skin p-8 shadow-[12px_12px_0_rgba(0,0,0,0.5)]">
+        <div className="bg-mario-red inline-block px-3.5 py-1.5 mb-4 border-3 border-black">
+          <span className="font-press-start text-white text-[8px] tracking-wider">
             WORLD 1-4
           </span>
         </div>
         
-        <h1 style={{ fontFamily: '"Press Start 2P"', color: '#FAB278', fontSize: '20px', marginBottom: '16px' }}>CONTACT</h1>
-        <p style={{ fontFamily: '"Press Start 2P"', lineHeight: 2, fontSize: '9px', color: '#DDD' }}>
+        <h1 className="font-press-start text-mario-skin text-[20px] mb-4 uppercase tracking-wider">Contact</h1>
+        <p className="font-press-start leading-relaxed text-[9px] text-[#DDD]">
           Let's build something amazing together!
         </p>
 
         <form
           onSubmit={handleSubmit}
-          style={{ background: 'rgba(0,0,0,0.6)', border: '3px solid #FAB278', padding: '24px', marginTop: '24px' }}
+          className="bg-black/60 border-3 border-mario-skin p-6 mt-6"
         >
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '9px', color: '#FAB278', marginBottom: '8px', fontFamily: '"Press Start 2P"' }}>PLAYER NAME</label>
+          <div className="mb-4">
+            <label className="block text-[9px] text-mario-skin mb-2 font-press-start uppercase">Player Name</label>
             <input
               type="text"
               placeholder="Your name..."
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              style={{ width: '100%', background: '#111', border: '2px solid #444', color: '#FFF', fontFamily: '"Press Start 2P"', fontSize: '9px', padding: '12px', outline: 'none' }}
+              className="w-full bg-[#111] border-2 border-[#444] text-white font-press-start text-[9px] p-3 outline-none focus:border-white transition-colors"
               required
             />
           </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '9px', color: '#FAB278', marginBottom: '8px', fontFamily: '"Press Start 2P"' }}>COMMS CHANNEL</label>
+          <div className="mb-4">
+            <label className="block text-[9px] text-mario-skin mb-2 font-press-start uppercase">Comms Channel</label>
             <input
               type="email"
               placeholder="your@email.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              style={{ width: '100%', background: '#111', border: '2px solid #444', color: '#FFF', fontFamily: '"Press Start 2P"', fontSize: '9px', padding: '12px', outline: 'none' }}
+              className="w-full bg-[#111] border-2 border-[#444] text-white font-press-start text-[9px] p-3 outline-none focus:border-white transition-colors"
               required
             />
           </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '9px', color: '#FAB278', marginBottom: '8px', fontFamily: '"Press Start 2P"' }}>MISSION BRIEF</label>
+          <div className="mb-4">
+            <label className="block text-[9px] text-mario-skin mb-2 font-press-start uppercase">Mission Brief</label>
             <textarea
               placeholder="Tell me about your project..."
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              style={{ width: '100%', minHeight: '80px', background: '#111', border: '2px solid #444', color: '#FFF', fontFamily: '"Press Start 2P"', fontSize: '9px', padding: '12px', outline: 'none', resize: 'vertical' }}
+              className="w-full min-h-[80px] bg-[#111] border-2 border-[#444] text-white font-press-start text-[9px] p-3 outline-none focus:border-white transition-colors resize-vertical"
               required
             />
           </div>
           <button
             type="submit"
-            style={{ width: '100%', background: '#E52020', color: '#FFF', border: '3px solid #000', fontFamily: '"Press Start 2P"', fontSize: '11px', padding: '14px', cursor: 'pointer', boxShadow: '4px 4px 0 #000' }}
+            className="w-full bg-mario-red text-white border-3 border-black font-press-start text-[11px] p-3.5 cursor-pointer shadow-[4px_4px_0_#000] hover:translate-y-[-2px] transition-transform active:translate-y-0"
           >
             ▶ START MISSION
           </button>

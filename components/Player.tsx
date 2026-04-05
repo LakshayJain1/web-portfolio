@@ -6,23 +6,16 @@ import { WORLD_DATA } from './GameConfig';
 import { playJump, playCoin, playPipeEnter, playPowerUp, playBlockBump } from './SoundManager';
 
 const P = {
-  R1: '#FF4D4D', // highlight
-  R2: '#E52020', // base
-  R3: '#9E1010', // shadow
-
-  S1: '#FFD6A5',
-  S2: '#FAB278',
-  S3: '#C68642',
-
-  B1: '#4A7BFF',
-  B2: '#3060C8',
-  B3: '#1E3F8A',
-
-  T1: '#F4A261',
-  T2: '#F07820',
-  T3: '#8C4A1A',
-
-  K: '#202020',
+  R1: '#FF0000', // red
+  R2: '#B80000', // red shadow
+  B1: '#0058F8', // blue
+  B2: '#002088', // blue shadow
+  S1: '#D8A060', // tanned skin
+  S2: '#B07C44', // shadow skin
+  T1: '#8C5000', // brown
+  T2: '#503000', // brown shadow
+  K: '#000000',
+  W: '#FFFFFF',
   _: null as string | null,
 };
 
@@ -32,77 +25,62 @@ const E = P._;
 const emptyRows = Array.from({ length: 9 }, () => Array(24).fill(E));
 
 const MARIO_FRAMES = [
-
   // ================= IDLE =================
   [
-    [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R2, P.R3, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.K, P.K, P.K, P.S1, P.S2, P.K, P.S2, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, P.K, P.S1, P.K, P.S2, P.S2, P.S2, P.K, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, P.K, P.S1, P.K, P.K, P.S2, P.S2, P.S2, P.K, P.S3, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, E, E, E, P.B1, P.B2, P.T2, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.B1, P.B2, P.B2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.B1, P.B2, P.B2, P.B2, P.T2, P.T2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, P.S1, P.S2, P.B2, P.T2, P.T2, P.T2, P.T2, P.T2, P.B2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.S1, P.S2, P.S2, P.T2, P.T2, P.T2, P.T2, P.T2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, E, P.T2, P.T2, P.T2, E, P.T2, P.T2, P.T3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.K, P.K, P.T2, E, E, E, P.T2, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [P.K, P.K, P.K, E, E, E, E, E, P.K, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    ...emptyRows,
+    [E, E, E, E, E, P.R1, P.R1, P.R1, P.R1, P.R1, E, E],
+    [E, E, E, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1],
+    [E, E, E, P.T1, P.T1, P.T1, P.S1, P.S1, P.K, P.S1, E, E],
+    [E, E, P.T1, P.S1, P.T1, P.S1, P.S1, P.S1, P.K, P.S1, P.S1, P.S1],
+    [E, E, P.T1, P.S1, P.T1, P.T1, P.S1, P.S1, P.S1, P.K, P.S1, P.S1],
+    [E, E, E, P.T1, P.S1, P.S1, P.S1, P.S1, P.K, P.K, P.K, P.K],
+    [E, E, E, E, P.S1, P.S1, P.S1, P.S1, P.S1, P.S1, P.S1, E],
+    [E, E, E, P.R1, P.R1, P.B1, P.R1, P.R1, P.R1, E, E, E],
+    [E, E, P.R1, P.R1, P.R1, P.B1, P.R1, P.R1, P.B1, P.R1, P.R1, E],
+    [E, P.R1, P.R1, P.R1, P.R1, P.B1, P.B1, P.B1, P.B1, P.R1, P.R1, P.R1],
+    [E, P.S1, P.S1, P.R1, P.B1, P.S2, P.B1, P.B1, P.S2, P.B1, P.R1, P.S1],
+    [E, P.S1, P.S1, P.S1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, P.S1, P.S1],
+    [E, P.S1, P.S1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, E],
+    [E, E, E, P.B1, P.B1, P.B1, E, E, P.B1, P.B1, P.B1, E],
+    [E, E, P.T1, P.T1, P.T1, E, E, E, P.T1, P.T1, P.T1, E],
+    [E, P.T1, P.T1, P.T1, P.T1, E, E, E, P.T1, P.T1, P.T1, P.T1]
   ],
-
   // ================= WALK 1 =================
   [
-    [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R2, P.R3, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.K, P.K, P.K, P.S1, P.S2, P.K, P.S2, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, P.K, P.S1, P.K, P.S2, P.S2, P.S2, P.K, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, P.K, P.S1, P.K, P.K, P.S2, P.S2, P.S2, P.K, P.S3, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, E, E, E, P.B1, P.B2, P.T2, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.B1, P.B2, P.B2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.B1, P.B2, P.B2, P.B2, P.T2, P.T2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, P.S1, P.S2, P.B2, P.T2, P.T2, P.T2, P.T2, P.T2, P.B2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.S1, P.S2, P.S2, P.T2, P.T2, P.T2, P.T2, P.T2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, E, P.T2, P.T2, E, E, P.T2, P.T2, P.T3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.K, P.T2, P.K, E, E, E, P.K, P.T2, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [P.K, P.K, E, P.K, E, E, E, P.K, E, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    ...emptyRows,
+    [E, E, E, E, E, P.R1, P.R1, P.R1, P.R1, P.R1, E, E],
+    [E, E, E, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1],
+    [E, E, E, P.T1, P.T1, P.T1, P.S1, P.S1, P.K, P.S1, E, E],
+    [E, E, P.T1, P.S1, P.T1, P.S1, P.S1, P.S1, P.K, P.S1, P.S1, P.S1],
+    [E, E, P.T1, P.S1, P.T1, P.T1, P.S1, P.S1, P.S1, P.K, P.S1, P.S1],
+    [E, E, E, P.T1, P.S1, P.S1, P.S1, P.S1, P.K, P.K, P.K, P.K],
+    [E, E, E, E, P.S1, P.S1, P.S1, P.S1, P.S1, P.S1, P.S1, E],
+    [E, E, E, P.R1, P.R1, P.B1, P.R1, P.R1, P.R1, E, E, E],
+    [E, E, P.S1, P.R1, P.R1, P.B1, P.R1, P.R1, P.B1, P.R1, E, E], // Swing left arm forward
+    [E, P.S1, P.S1, P.R1, P.R1, P.B1, P.B1, P.B1, P.B1, P.R1, P.R1, E],
+    [E, P.R1, P.R1, P.R1, P.B1, P.S2, P.B1, P.B1, P.S2, P.B1, P.R1, E],
+    [E, E, E, P.R1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, E, E],
+    [E, E, E, P.S1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, E, E], // Pull right arm back
+    [E, E, E, E, P.B1, P.B1, E, E, P.B1, P.B1, E, E],
+    [E, E, E, P.T1, P.T1, E, E, E, P.T1, P.T1, P.T1, E],
+    [E, E, P.T1, P.T1, P.T1, E, E, E, E, P.T1, P.T1, P.T1] // Leg split
   ],
-
   // ================= WALK 2 =================
   [
-    [E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, E, P.R1, P.R1, P.R2, P.R2, P.R2, P.R3, P.R3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.K, P.K, P.K, P.S1, P.S2, P.K, P.S2, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, P.K, P.S1, P.K, P.S2, P.S2, P.S2, P.K, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, P.K, P.S1, P.K, P.K, P.S2, P.S2, P.S2, P.K, P.S3, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, E, E, E, P.B1, P.B2, P.T2, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, E, E, P.B1, P.B2, P.B2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.B1, P.B2, P.B2, P.B2, P.T2, P.T2, P.T2, P.B2, P.B3, P.B3, E, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, P.S1, P.S2, P.B2, P.T2, P.T2, P.T2, P.T2, P.T2, P.B2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.S1, P.S2, P.S2, P.T2, P.T2, P.T2, P.T2, P.T2, P.S2, P.S2, P.S3, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    [E, E, P.T2, P.T2, P.T2, E, E, P.T2, P.T3, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [E, P.K, P.K, P.T2, E, E, E, E, P.T2, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E, E],
-    [P.K, P.K, P.K, E, E, E, E, E, E, P.K, P.K, P.K, E, E, E, E, E, E, E, E, E, E, E, E],
-
-    ...emptyRows,
+    [E, E, E, E, E, E, E, E, E, E, E, E], // Bob down row
+    [E, E, E, E, E, P.R1, P.R1, P.R1, P.R1, P.R1, E, E],
+    [E, E, E, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1, P.R1],
+    [E, E, E, P.T1, P.T1, P.T1, P.S1, P.S1, P.K, P.S1, E, E],
+    [E, E, P.T1, P.S1, P.T1, P.S1, P.S1, P.S1, P.K, P.S1, P.S1, P.S1],
+    [E, E, P.T1, P.S1, P.T1, P.T1, P.S1, P.S1, P.S1, P.K, P.S1, P.S1],
+    [E, E, E, P.T1, P.S1, P.S1, P.S1, P.S1, P.K, P.K, P.K, P.K],
+    [E, E, E, E, P.S1, P.S1, P.S1, P.S1, P.S1, P.S1, P.S1, E],
+    [E, E, E, P.R1, P.R1, P.B1, P.R1, P.R1, P.R1, E, E, E],
+    [E, E, P.R1, P.R1, P.R1, P.B1, P.R1, P.R1, P.S1, P.R1, E, E], // Swing right arm forward
+    [E, P.R1, P.R1, P.R1, P.R1, P.B1, P.B1, P.B1, P.B1, P.S1, P.S1, E],
+    [E, P.R1, P.R1, P.S1, P.B1, P.S2, P.B1, P.B1, P.S2, P.B1, P.R1, E],
+    [E, E, P.S1, P.S1, P.B1, P.B1, P.B1, P.B1, P.B1, P.B1, E, E],
+    [E, E, E, E, P.B1, P.B1, E, E, P.B1, P.B1, E, E],
+    [E, E, P.T1, P.T1, P.T1, E, E, E, P.T1, P.T1, E, E],
+    [P.T1, P.T1, P.T1, P.T1, E, E, E, E, P.T1, P.T1, P.T1, P.T1] // Crouched leg split
   ],
 ];
 function drawMarioFrame(
@@ -111,11 +89,14 @@ function drawMarioFrame(
   scale: number,
   flipX: boolean
 ) {
-  ctx.clearRect(0, 0, SPRITE_SIZE * scale, SPRITE_SIZE * scale);
   const pixels = MARIO_FRAMES[frame % MARIO_FRAMES.length];
+  const rows = pixels.length;
+  const cols = pixels[0].length;
+
+  ctx.clearRect(0, 0, cols * scale, rows * scale);
   ctx.save();
   if (flipX) {
-    ctx.translate(SPRITE_SIZE * scale, 0);
+    ctx.translate(cols * scale, 0);
     ctx.scale(-1, 1);
   }
   pixels.forEach((row, ry) => {
@@ -128,9 +109,9 @@ function drawMarioFrame(
   ctx.restore();
 }
 
-// Mario hitbox: 40x56 (roughly 1.25x1.75 blocks)
-const MARIO_W = 40;
-const MARIO_H = 56;
+// Mario hitbox: 40x56
+const MARIO_W = 44;
+const MARIO_H = 64;
 const PIPE_TOP_W = 40;
 const PIPE_BODY_W = 32;
 const PIPE_H = 74;
@@ -147,7 +128,7 @@ export default function Player() {
     activeWorld, setActiveWorld, collectCoin, setActivePopup,
     gameState, setGameState, triggerNavigation,
     lives, setLives, powerUpEffect, setPowerUpEffect,
-    dismissOnboarding
+    dismissOnboarding, fullReset
   } = useGame();
 
   const state = useRef({
@@ -172,26 +153,30 @@ export default function Player() {
     ArrowLeft: false,
     ArrowUp: false,
     ArrowDown: false,
+    KeyW: false,
+    KeyA: false,
+    KeyS: false,
+    KeyD: false,
+    Space: false,
   });
 
   const hasInteracted = useRef(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (keys.current.hasOwnProperty(e.code)) {
+      if (e.code in keys.current) {
         keys.current[e.code as keyof typeof keys.current] = true;
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code)) {
           e.preventDefault();
         }
       }
-      // Dismiss onboarding on first input
       if (!hasInteracted.current) {
         hasInteracted.current = true;
         dismissOnboarding();
       }
     };
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (keys.current.hasOwnProperty(e.code)) {
+      if (e.code in keys.current) {
         keys.current[e.code as keyof typeof keys.current] = false;
       }
     };
@@ -222,8 +207,7 @@ export default function Player() {
 
       const viewport = document.getElementById('viewport-wrapper');
       const H = viewport ? viewport.clientHeight : window.innerHeight;
-      
-      // TERRAIN_GROUND matches WorldTerrain's groundY (H - 64) — where ground tiles are drawn
+
       const TERRAIN_GROUND = H - 64;
       const GROUND_Y = TERRAIN_GROUND - MARIO_H;
 
@@ -233,7 +217,6 @@ export default function Player() {
         started = true;
       }
 
-      // ─── Physics constants ─────────────────────
       const SPEED = 350;
       const GRAVITY = 2400;
       const JUMP_FORCE = -750;
@@ -242,7 +225,6 @@ export default function Player() {
       const config = WORLD_DATA[activeWorld];
       if (!config) { animationId = requestAnimationFrame(loop); return; }
 
-      // ─── Pipe enter animation ──────────────────
       if (s.animState === 'pipe_enter') {
         if (!s.hasPlayedPipeSound) {
           playPipeEnter();
@@ -275,7 +257,6 @@ export default function Player() {
           }
         }
       } else if (gameState === 'idle') {
-        // ─── Check pipe entry ────────────────────
         const pipes = config.pipes || [];
         let onTopOfPipe: typeof pipes[0] | null = null;
         for (const p of pipes) {
@@ -284,7 +265,6 @@ export default function Player() {
           const marioCenterX = s.x + MARIO_W / 2;
           const distX = Math.abs(marioCenterX - pipeCenterX);
 
-          // Enter pipe if: near pipe horizontally AND (on ground or on top of pipe) AND not jumping
           const onGround = Math.abs(s.y - GROUND_Y) < 6;
           const onPipeTop = Math.abs((s.y + MARIO_H) - pipeVisualTop) < 10;
           if (distX < 60 && (onGround || onPipeTop) && !s.isJumping) {
@@ -292,25 +272,23 @@ export default function Player() {
           }
         }
 
-        if (K.ArrowDown && onTopOfPipe) {
+        if ((K.ArrowDown || K.KeyS) && onTopOfPipe) {
           s.animState = 'pipe_enter';
           s.vx = 0;
           s.vy = 0;
           s.pipeEnterTimer = 0;
           s.hasPlayedPipeSound = false;
-          // Center Mario on pipe
           s.x = onTopOfPipe.x + PIPE_BODY_W / 2 - MARIO_W / 2;
         }
 
         if (s.animState !== 'pipe_enter') {
-          // ─── Horizontal movement ───────────────
           if (s.knockbackTimer > 0) {
             s.knockbackTimer -= dt;
           } else {
-            if (K.ArrowRight) {
+            if (K.ArrowRight || K.KeyD) {
               s.vx = SPEED;
               s.dir = 1;
-            } else if (K.ArrowLeft) {
+            } else if (K.ArrowLeft || K.KeyA) {
               s.vx = -SPEED;
               s.dir = -1;
             } else {
@@ -318,28 +296,24 @@ export default function Player() {
             }
           }
 
-          // ─── Jump ──────────────────────────────
-          if (K.ArrowUp && !s.isJumping) {
+          if ((K.ArrowUp || K.KeyW || K.Space) && !s.isJumping) {
             s.vy = JUMP_FORCE;
             s.isJumping = true;
             playJump();
             setActivePopup(null);
           }
 
-          // ─── Apply gravity ─────────────────────
           s.vy += GRAVITY * dt;
           if (s.vy > MAX_FALL) s.vy = MAX_FALL;
 
           let nextX = s.x + s.vx * dt;
           let nextY = s.y + s.vy * dt;
 
-          // ─── Horizontal pipe collision ─────────
           for (const p of pipes) {
             const pipeVisualTop = TERRAIN_GROUND - PIPE_H;
             const pipeLeft = p.x - 4;
             const pipeRight = p.x + PIPE_BODY_W + 4;
 
-            // Only block if Mario's bottom is below pipe top (walking beside it)
             if (s.y + MARIO_H > pipeVisualTop + 4) {
               if (nextX + MARIO_W > pipeLeft && nextX < pipeRight) {
                 if (s.x + MARIO_W <= pipeLeft) {
@@ -352,7 +326,6 @@ export default function Player() {
             }
           }
 
-          // ─── Solid zones collision (about board) ──
           const solidZones = config.solidZones || [];
           for (const zone of solidZones) {
             const zoneTop = GROUND_Y - zone.height;
@@ -370,7 +343,6 @@ export default function Player() {
 
           s.x = nextX;
 
-          // ─── Block head collision (jumping up) ──
           if (s.vy < 0) {
             const blocks = config.blocks || [];
             for (const b of blocks) {
@@ -379,23 +351,17 @@ export default function Player() {
               const bLeft = b.x;
               const bRight = b.x + BLOCK_SIZE;
 
-              // Mario's head hitting block bottom
               if (s.x + MARIO_W > bLeft && s.x < bRight) {
-                // If Mario's top is below block bottom but next frame it's above it
                 if (nextY < bBottom && s.y >= bBottom - 8) {
                   nextY = bBottom;
                   s.vy = 0;
-
                   if (!b.hit) {
                     b.hit = true;
                     b.bounceTime = performance.now();
                     playBlockBump();
-
                     if (b.project) {
                       playPowerUp();
-                      setTimeout(() => {
-                        setActivePopup(b.project!);
-                      }, 400);
+                      setTimeout(() => { setActivePopup(b.project!); }, 400);
                     }
                   }
                 }
@@ -418,11 +384,9 @@ export default function Player() {
                     b.bounceTime = performance.now();
                     playBlockBump();
                     playPowerUp();
-                    // Spawn power-up effect after short delay
                     setTimeout(() => {
-                      if (b.powerUp === 'mushroom') {
-                        setLives(prev => Math.min(prev + 1, 99));
-                      } else if (b.powerUp === 'flower') {
+                      if (b.powerUp === 'mushroom') setLives(prev => Math.min(prev + 1, 99));
+                      else if (b.powerUp === 'flower') {
                         setPowerUpEffect('flower');
                         setTimeout(() => setPowerUpEffect('none'), 10000);
                       }
@@ -433,14 +397,12 @@ export default function Player() {
             }
           }
 
-          // ─── Vertical pipe collision (landing) ──
           let landedOnPipe = false;
           if (s.vy > 0) {
             for (const p of pipes) {
               const pipeVisualTop = TERRAIN_GROUND - PIPE_H;
               const pipeLeft = p.x - 4;
               const pipeRight = p.x + PIPE_BODY_W + 4;
-
               if (s.x + MARIO_W > pipeLeft + 8 && s.x < pipeRight - 8) {
                 if (nextY + MARIO_H >= pipeVisualTop && s.y + MARIO_H <= pipeVisualTop + s.vy * dt + 4) {
                   nextY = pipeVisualTop - MARIO_H;
@@ -453,16 +415,13 @@ export default function Player() {
             }
           }
 
-          // ─── Ground collision ──────────────────
           if (!landedOnPipe && nextY >= GROUND_Y) {
             nextY = GROUND_Y;
             s.vy = 0;
             s.isJumping = false;
           }
-
           s.y = nextY;
 
-          // ─── Coin collision ────────────────────
           const coins = config.coins || [];
           for (const c of coins) {
             if (!c.collected) {
@@ -472,47 +431,35 @@ export default function Player() {
                 c.collected = true;
                 c.popTime = performance.now();
                 playCoin();
-                // pop.x needs to be screen relative: worldX + cameraOffset
                 collectCoin(c.x + s.cameraX, cY);
               }
             }
           }
 
-          // ─── Enemy collision ────────────────────
-          if (s.invulnerableTimer > 0) {
-            s.invulnerableTimer -= dt;
-          }
-
+          if (s.invulnerableTimer > 0) s.invulnerableTimer -= dt;
           const enemies = config.enemies || [];
           for (const e of enemies) {
             if (e.isDead) continue;
-
-            const eY = TERRAIN_GROUND - e.yOffset - 32; // Assume enemy height 32
+            const eY = TERRAIN_GROUND - e.yOffset - 32;
             const playerRect = { x: s.x + 8, y: s.y + 8, w: MARIO_W - 16, h: MARIO_H - 16 };
             const enemyRect = { x: e.x, y: eY, w: 32, h: 32 };
 
             if (isColliding(playerRect, enemyRect)) {
-              // Stomp check
               if (s.vy > 0 && s.y + MARIO_H < eY + 16) {
                 e.isDead = true;
-                s.vy = -400; // Bounce up
+                s.vy = -400;
                 playBlockBump();
               } else if (s.invulnerableTimer <= 0) {
-                // Hit by enemy
                 setLives(prev => {
                   const next = prev - 1;
                   if (next <= 0) {
-                    // Game Over - reset
                     triggerNavigation('hero');
-                    setTimeout(() => {
-                      s.x = 100;
-                      s.y = GROUND_Y;
-                      setLives(5);
-                    }, 500);
+                    fullReset();
+                    setTimeout(() => { s.x = 100; s.y = GROUND_Y; }, 500);
                   }
                   return next;
                 });
-                s.invulnerableTimer = 2; // 2 seconds invulnerability
+                s.invulnerableTimer = 2;
                 s.knockbackTimer = 0.4;
                 s.vx = s.x < e.x ? -SPEED : SPEED;
                 s.vy = -300;
@@ -520,14 +467,13 @@ export default function Player() {
             }
           }
 
-          // ─── World bounds ──────────────────────
           const currentWorldWidth = Math.max(config.width, window.innerWidth);
           if (s.x < 0) s.x = 0;
           if (s.x > currentWorldWidth - MARIO_W) s.x = currentWorldWidth - MARIO_W;
 
-          // ─── End-of-contact-world wrap ─────────
           if (activeWorld === 'contact' && s.x >= config.width - 200) {
             triggerNavigation('hero');
+            fullReset();
             s.x = WORLD_DATA['hero'].startX;
             s.y = GROUND_Y;
             s.vx = 0;
@@ -535,86 +481,53 @@ export default function Player() {
             started = false;
           }
 
-          // ─── Animation state ───────────────────
-          if (s.isJumping) {
-            s.animState = 'jump';
-          } else if (Math.abs(s.vx) > 0) {
+          if (s.isJumping) s.animState = 'jump';
+          else if (Math.abs(s.vx) > 0) {
             s.animState = 'walk';
             s.frameTimer += dt * 10;
-            if (s.frameTimer > 1) {
-              s.walkFrame++;
-              s.frameTimer = 0;
-            }
-          } else {
-            s.animState = 'idle';
-            s.walkFrame = 0;
-          }
+            if (s.frameTimer > 1) { s.walkFrame++; s.frameTimer = 0; }
+          } else { s.animState = 'idle'; s.walkFrame = 0; }
         }
       }
 
-      // ─── Draw Mario ───────────────────────────
       const frame = s.animState === 'jump' ? 2 : (s.animState === 'walk' ? s.walkFrame % 3 : 0);
-
-      // Blink if invulnerable
-      if (s.invulnerableTimer > 0 && Math.floor(time / 100) % 2 === 0) {
-        // Skip drawing
-      } else {
+      if (s.invulnerableTimer > 0 && Math.floor(time / 100) % 2 === 0) {} 
+      else {
         drawMarioFrame(ctx, frame, SCALE, s.dir === -1);
-
-        // Add flower aura if active
         if (powerUpEffect === 'flower') {
-          ctx.strokeStyle = '#FFD700';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([4, 4]);
-          ctx.strokeRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+          ctx.strokeStyle = '#FFD700'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+          ctx.strokeRect(0, 0, CANVAS_W, CANVAS_H);
         }
       }
 
-      // ─── Camera ───────────────────────────────
       if (containerRef.current) {
         const currentWorldWidth = Math.max(config.width, window.innerWidth);
         const maxScrollRight = Math.max(0, currentWorldWidth - window.innerWidth);
         let targetCameraX = window.innerWidth / 2 - s.x;
         targetCameraX = Math.min(0, Math.max(-maxScrollRight, targetCameraX));
-
         const worldContainer = document.getElementById('world-container');
-        if (worldContainer) {
-          worldContainer.style.transform = `translateX(${targetCameraX}px)`;
-        }
+        if (worldContainer) worldContainer.style.transform = `translateX(${targetCameraX}px)`;
         s.cameraX = targetCameraX;
-        const offsetX = (MARIO_W - CANVAS_SIZE) / 2;
-        const offsetY = (MARIO_H - CANVAS_SIZE) / 2;
-        containerRef.current.style.transform =
-          `translate(${s.x + targetCameraX + offsetX}px, ${s.y + offsetY}px)`
+        const offsetX = (MARIO_W - CANVAS_W) / 2;
+        const offsetY = (MARIO_H - CANVAS_H) / 2;
+        containerRef.current.style.transform = `translate(${s.x + targetCameraX + offsetX}px, ${s.y + offsetY}px)`
       }
-
       animationId = requestAnimationFrame(loop);
     };
-
     animationId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animationId);
-  }, [collectCoin, activeWorld, setActiveWorld, setActivePopup, gameState, triggerNavigation, dismissOnboarding]);
+  }, [collectCoin, activeWorld, setActiveWorld, setActivePopup, gameState, triggerNavigation, dismissOnboarding, fullReset]);
   const SCALE = 4;
-  const CANVAS_SIZE = SPRITE_SIZE * SCALE;
+  const pixels = MARIO_FRAMES[0];
+  const CANVAS_W = pixels[0].length * SCALE;
+  const CANVAS_H = pixels.length * SCALE;
   return (
     <div
       ref={containerRef}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: `${MARIO_W}px`,
-        height: `${MARIO_H}px`,
-        zIndex: 1000,
-        willChange: 'transform'
-      }}
+      className="absolute top-0 left-0 z-[1000] translate-x-0 translate-y-0 will-change-transform"
+      style={{ width: `${MARIO_W}px`, height: `${MARIO_H}px` }}
     >
-      <canvas
-        ref={canvasRef}
-        width={CANVAS_SIZE}
-        height={CANVAS_SIZE}
-        style={{ display: 'block' }}
-      />
+      <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="block" />
     </div>
   );
 }

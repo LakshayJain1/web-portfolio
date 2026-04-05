@@ -10,111 +10,58 @@ export default function HeroWorld() {
   const { onboardingDismissed } = useGame();
 
   return (
-    <div style={{ position: 'relative', width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2000), height: '100%' }}>
-      <WorldTerrain 
-         worldId="hero"
+    <div
+      className="relative h-full"
+      style={{ width: Math.max(config.width, typeof window !== 'undefined' ? window.innerWidth : 2200) }}
+    >
+      <WorldTerrain
+        worldId="hero"
       />
-      
+
       {/* Title Card */}
-      <div style={{
-          position: 'absolute',
-          top: '18%',
-          left: '300px',
-          width: '600px',
-          textAlign: 'center',
-          zIndex: 10
-      }}>
-         <h1 style={{ 
-           fontFamily: '"Press Start 2P"', 
-           color: '#FFD700', 
-           textShadow: '4px 4px 0px #B8860B, -1px -1px 0px #000', 
-           fontSize: '32px',
-           letterSpacing: '2px'
-         }}>
-           DEV LAKSHAY
-         </h1>
-         <p style={{ 
-           fontFamily: '"Press Start 2P"', 
-           color: 'white', 
-           marginTop: '20px', 
-           fontSize: '11px', 
-           lineHeight: '2.2',
-           textShadow: '2px 2px 0 #000'
-         }}>
-            DESIGNER  ✦  DEVELOPER  ✦  STORYTELLER
-         </p>
+      <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,800px)] text-center px-5 z-10">
+        <h1 className="font-press-start text-coin text-[clamp(20px,4vw,36px)] tracking-wider mb-2.5 [text-shadow:4px_4px_0_#B8860B,-1px_-1px_0_#000]">
+          LAKSHAY JAIN
+        </h1>
+        <p className="font-press-start text-white mt-2.5 text-[clamp(8px,1.2vw,11px)] leading-8 [text-shadow:2px_2px_0_#000] tracking-tight">
+          PRODUCT DESIGNER  ✦  INNOVATOR  ✦  STORYTELLER
+        </p>
       </div>
 
       {/* Pipe Hint */}
-      <div style={{
-          position: 'absolute',
-          bottom: '160px',
-          left: `${config.pipes[0]?.x - 40}px`,
-          textAlign: 'center',
-          zIndex: 10,
-          width: '160px',
-      }}>
-          <span style={{fontFamily:'"Press Start 2P"', color:'#5CF', fontSize:'8px', textShadow: '1px 1px 0 #000'}}>
-            PRESS ↓ TO<br/>ENTER PIPE
-          </span>
+      <div
+        className="absolute bottom-[160px] text-center z-10 w-[160px]"
+        style={{ left: `${config.pipes[0]?.x - 40}px` }}
+      >
+        <span className="font-press-start text-[#5CF] text-[8px] [text-shadow:1px_1px_0_#000]">
+          PRESS ↓ TO<br />ENTER PIPE
+        </span>
       </div>
 
       {/* Onboarding Overlay */}
       {!onboardingDismissed && (
-        <div style={{
-          position: 'fixed',
-          bottom: '18%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 4000,
-          pointerEvents: 'none',
-          animation: 'onboardingPulse 2s ease-in-out infinite',
-        }}>
-          <div style={{
-            background: 'rgba(0, 0, 0, 0.9)',
-            border: '4px solid #FFD700',
-            padding: '20px 36px',
-            textAlign: 'center',
-            boxShadow: '0 0 30px rgba(255, 215, 0, 0.25), 8px 8px 0 rgba(0,0,0,0.5)',
-          }}>
-            <div style={{
-              fontFamily: '"Press Start 2P", monospace',
-              fontSize: '10px',
-              color: '#FFD700',
-              marginBottom: '16px',
-              letterSpacing: '3px',
-            }}>
+        <div className="fixed bottom-[18%] left-1/2 -translate-x-1/2 z-[4000] pointer-events-none animate-onboarding-pulse">
+          <div className="bg-black/90 border-4 border-coin p-20 text-center shadow-[0_0_30px_rgba(255,215,0,0.25),8px_8px_0_rgba(0,0,0,0.5)]">
+            <div className="font-press-start text-[10px] text-coin mb-4 tracking-[3px]">
               HOW TO PLAY
             </div>
-            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="flex gap-4 justify-center items-center">
               {[
                 { key: '←', label: 'LEFT' },
                 { key: '→', label: 'RIGHT' },
                 { key: '↑', label: 'JUMP' },
                 { key: '↓', label: 'PIPE' },
               ].map((item) => (
-                <div key={item.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    background: '#1A1A2E',
-                    border: '3px solid #555',
-                    borderBottom: '4px solid #333',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontFamily: '"Press Start 2P", monospace',
-                    fontSize: '16px',
-                    color: '#FFF',
-                  }}>
-                    {item.key}
+                <div key={item.label} className="flex flex-col items-center gap-2">
+                  <div className="w-[45px] h-[45px] bg-[#1A1A2E] border-3 border-[#555] border-b-5 border-b-[#333] flex items-center justify-center font-press-start text-[18px] text-white inner-shadow">
+                    <span
+                      className="inline-block leading-none"
+                      style={{ transform: item.key === '↑' || item.key === '↓' ? 'scale(1.2)' : 'none' }}
+                    >
+                      {item.key}
+                    </span>
                   </div>
-                  <span style={{
-                    fontFamily: '"Press Start 2P", monospace',
-                    fontSize: '6px',
-                    color: '#888',
-                    letterSpacing: '1px',
-                  }}>
+                  <span className="font-press-start text-[6px] text-[#888] tracking-tight">
                     {item.label}
                   </span>
                 </div>
