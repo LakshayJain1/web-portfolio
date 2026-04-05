@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { GameProvider } from "../components/GameContext";
+import DeviceGuard from "../components/DeviceGuard";
 
 const BASE_URL = "https://devlakshay.dev";
 
@@ -97,7 +98,9 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body>
-        <GameProvider>{children}</GameProvider>
+        <DeviceGuard>
+          <GameProvider>{children}</GameProvider>
+        </DeviceGuard>
         <SchemaMarkup />
       </body>
     </html>

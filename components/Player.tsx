@@ -182,9 +182,21 @@ export default function Player() {
     };
     window.addEventListener('keydown', handleKeyDown, { passive: false });
     window.addEventListener('keyup', handleKeyUp);
+
+    // Mobile interaction trigger (for sound/onboarding)
+    const handleTouchStart = () => {
+      if (!hasInteracted.current) {
+        hasInteracted.current = true;
+        dismissOnboarding();
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('touchstart', handleTouchStart);
     };
   }, [dismissOnboarding]);
 
