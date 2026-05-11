@@ -422,10 +422,12 @@ export default function Player() {
       const frame = s.animState === 'jump' ? 2 : (s.animState === 'walk' ? s.walkFrame % 3 : 0);
       drawMarioFrame(ctx, frame, MARIO_SCALE, s.dir === -1);
 
+      const isBooted = typeof window !== 'undefined' && sessionStorage.getItem('nexus-booted') === 'true';
+
       if (containerRef.current) {
         const breathY = (s.animState === 'idle') ? Math.sin(s.idleBreathTimer * 2.5) * 1.5 : 0;
         containerRef.current.style.transform = `translate3d(${s.x}px, ${s.y + breathY}px, 0)`;
-        containerRef.current.style.opacity = s.invulnerableTimer > 0 ? (Math.floor(time / 100) % 2 ? '0.3' : '1') : '1';
+        containerRef.current.style.opacity = !isBooted ? '0' : (s.invulnerableTimer > 0 ? (Math.floor(time / 100) % 2 ? '0.3' : '1') : '1');
       }
 
       animationId = requestAnimationFrame(loop);

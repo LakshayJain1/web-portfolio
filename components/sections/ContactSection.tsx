@@ -31,16 +31,16 @@ export default function ContactSection() {
         <WorldTerrain worldId="contact" />
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center px-4 md:px-8 py-24 md:py-32">
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 md:px-8 py-24 md:py-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-[600px] mx-auto w-full"
+          className="max-w-[800px] mx-auto w-full"
         >
           {/* World badge */}
-          <div className="mb-6 text-center">
+          <div className="mb-10 text-center">
             <span className="font-pixel text-[7px] text-[var(--mario-skin)] border border-[var(--mario-skin)] px-3 py-1.5 tracking-wider inline-block">
               FINAL WORLD // COMMS TERMINAL
             </span>
@@ -52,7 +52,7 @@ export default function ContactSection() {
             style={{ boxShadow: '0 0 30px rgba(255, 215, 0, 0.06), 4px 4px 0 rgba(0, 0, 0, 0.4)' }}
           >
             {/* Terminal title bar */}
-            <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border-dim)] bg-[rgba(0,0,0,0.3)]">
+            <div className="flex items-center justify-between px-6 py-3 border-b border-[var(--border-dim)] bg-[rgba(0,0,0,0.3)]">
               <span className="font-pixel text-[6px] text-[var(--text-dim)] tracking-wider">
                 COMMS.EXE — ENCRYPTED TRANSMISSION
               </span>
@@ -64,7 +64,7 @@ export default function ContactSection() {
             </div>
 
             {/* Body */}
-            <div className="p-6 md:p-8">
+            <div className="py-12 md:py-20 px-12 md:px-24">
               {submitted ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -83,16 +83,16 @@ export default function ContactSection() {
                 </motion.div>
               ) : (
                 <>
-                  <h2 className="font-pixel text-[var(--coin)] text-[clamp(16px,3vw,22px)] mb-4 text-center tracking-wider">
+                  <h2 className="font-pixel text-[var(--coin)] text-[clamp(18px,4vw,28px)] mb-6 text-center tracking-wider">
                     SEND TRANSMISSION
                   </h2>
-                  <p className="font-terminal text-[var(--text-dim)] text-[16px] text-center mb-8">
+                  <p className="font-terminal text-[var(--text-dim)] text-[18px] text-center mb-12 max-w-[550px] mx-auto leading-relaxed block w-full">
                     Got a mission? Let&apos;s build something legendary together.
                   </p>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-10">
                     <div>
-                      <label className="font-pixel text-[7px] text-[var(--text-cyan)] mb-2 block tracking-wider uppercase">
+                      <label className="font-pixel text-[10px] text-[var(--text-cyan)] mb-4 block tracking-wider uppercase opacity-80">
                         &gt; SENDER_ID
                       </label>
                       <input
@@ -100,13 +100,13 @@ export default function ContactSection() {
                         placeholder="Your name..."
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-[rgba(0,0,0,0.4)] border border-[var(--border-dim)] text-[var(--text-primary)] font-terminal text-[16px] p-3 outline-none transition-colors focus:border-[var(--coin)]"
+                        className="w-full bg-[rgba(0,0,0,0.4)] border border-[var(--border-dim)] text-[var(--text-primary)] font-terminal text-[16px] p-4 outline-none transition-colors focus:border-[var(--coin)]"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="font-pixel text-[7px] text-[var(--text-cyan)] mb-2 block tracking-wider uppercase">
+                      <label className="font-pixel text-[10px] text-[var(--text-cyan)] mb-4 block tracking-wider uppercase opacity-80">
                         &gt; COMMS_CHANNEL
                       </label>
                       <input
@@ -114,20 +114,20 @@ export default function ContactSection() {
                         placeholder="your@email.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-[rgba(0,0,0,0.4)] border border-[var(--border-dim)] text-[var(--text-primary)] font-terminal text-[16px] p-3 outline-none transition-colors focus:border-[var(--coin)]"
+                        className="w-full bg-[rgba(0,0,0,0.4)] border border-[var(--border-dim)] text-[var(--text-primary)] font-terminal text-[16px] p-4 outline-none transition-colors focus:border-[var(--coin)]"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="font-pixel text-[7px] text-[var(--text-cyan)] mb-2 block tracking-wider uppercase">
+                      <label className="font-pixel text-[10px] text-[var(--text-cyan)] mb-4 block tracking-wider uppercase opacity-80">
                         &gt; MISSION_BRIEF
                       </label>
                       <textarea
                         placeholder="Tell me about your project..."
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="w-full min-h-[100px] bg-[rgba(0,0,0,0.4)] border border-[var(--border-dim)] text-[var(--text-primary)] font-terminal text-[16px] p-3 outline-none transition-colors focus:border-[var(--coin)] resize-none"
+                        className="w-full min-h-[100px] bg-[rgba(0,0,0,0.4)] border border-[var(--border-dim)] text-[var(--text-primary)] font-terminal text-[16px] p-4 outline-none transition-colors focus:border-[var(--coin)] resize-none"
                         required
                       />
                     </div>
@@ -145,7 +145,7 @@ export default function ContactSection() {
           </div>
 
           {/* Social Links */}
-          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+          <div className="mt-12 flex flex-wrap gap-4 justify-center">
             {[
               { label: 'INSTAGRAM', href: 'https://www.instagram.com/lakshayjain986/' },
               { label: 'DRIBBBLE', href: 'https://dribbble.com/Lakshay123X' },
@@ -157,7 +157,7 @@ export default function ContactSection() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-pixel text-[6px] text-[var(--text-dim)] border border-[var(--border-dim)] px-3 py-2 hover:text-[var(--coin)] hover:border-[var(--coin)] transition-colors tracking-wider"
+                className="font-pixel text-[10px] text-[var(--text-dim)] border border-[var(--border-dim)] px-5 py-3 hover:text-[var(--coin)] hover:border-[var(--coin)] transition-colors tracking-wider bg-[rgba(255,255,255,0.03)]"
               >
                 {social.label}
               </a>
@@ -165,7 +165,7 @@ export default function ContactSection() {
           </div>
 
           {/* Footer */}
-          <div className="mt-12 text-center border-t border-[var(--border-dim)] pt-8">
+          <div className="mt-16 text-center border-t border-[var(--border-dim)] pt-12">
             <p className="font-pixel text-[6px] text-[var(--text-dim)] tracking-wider">
               © 2025 <span className="text-[var(--coin)]">DEV LAKSHAY</span>
             </p>

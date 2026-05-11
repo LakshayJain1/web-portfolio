@@ -15,38 +15,18 @@ const stagger = {
   },
 };
 
-const PixelAvatar = () => (
-  <div className="w-24 h-24 md:w-32 md:h-32 bg-[var(--bg-surface)] border-2 border-[var(--border-active)] flex items-center justify-center relative overflow-hidden">
-    <div className="grid grid-cols-8 grid-rows-8 gap-[2px]">
-      {[
-        [0,0,0,1,1,1,0,0],
-        [0,0,1,1,1,1,1,0],
-        [0,1,1,0,0,0,1,1],
-        [0,1,1,0,0,0,1,1],
-        [0,0,0,1,0,1,0,0],
-        [0,0,0,1,0,1,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,1,1,1,1,0,0],
-      ].map((row, ry) =>
-        row.map((pixel, rx) => (
-          <div
-            key={`${ry}-${rx}`}
-            className="w-[4px] h-[4px]"
-            style={{
-              background: pixel
-                ? ry < 4
-                  ? '#FAB278'
-                  : ry < 6
-                    ? '#000'
-                    : '#E52020'
-                : 'transparent',
-            }}
-          />
-        ))
-      )}
+const PixelAvatar = () => {
+  return (
+    <div className="w-24 h-24 md:w-32 md:h-32 bg-[var(--bg-surface)] border-2 border-[var(--border-active)] flex items-center justify-center relative overflow-hidden">
+      <img 
+        src="/pixelated-image.png" 
+        alt="Lakshay Jain"
+        className="w-full h-full object-cover"
+        style={{ imageRendering: 'pixelated' }}
+      />
     </div>
-  </div>
-);
+  );
+};
 
 export default function AboutSection() {
   const { unlockedAbout, aboutDecrypting } = useGame();
