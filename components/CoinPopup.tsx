@@ -10,13 +10,13 @@ export default function CoinPopup() {
       {coinPops.map((pop) => (
         <div
           key={pop.id}
-          className="fixed coin-pop"
+          className="coin-pop"
           style={{
             left: pop.x,
             top: pop.y,
           }}
         >
-          {pop.text}
+          +{pop.text}
         </div>
       ))}
     </>

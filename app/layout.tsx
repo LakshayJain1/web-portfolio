@@ -80,7 +80,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#5C94FC",
+  themeColor: "#0A0A0F",
   width: "device-width",
   initialScale: 1,
 };
@@ -93,11 +93,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body>
+        <div className="crt-scanline" aria-hidden="true" />
         <DeviceGuard>
           <GameProvider>{children}</GameProvider>
         </DeviceGuard>

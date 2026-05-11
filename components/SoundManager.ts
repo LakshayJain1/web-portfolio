@@ -148,3 +148,77 @@ export function playUIConfirm() {
   playTone(660, 0.06, 'square', 0.08, t);
   playTone(880, 0.10, 'square', 0.08, t + 0.05);
 }
+// ─── BACKGROUND MUSIC ENGINE ─────────────────────────────
+let currentMusicSource: OscillatorNode[] = [];
+let musicActive = false;
+let currentWorldId = '';
+
+const MELODIES: Record<string, { notes: number[], speed: number }> = {
+  hero: { 
+    // Simplified Overworld theme
+    notes: [330, 330, 0, 330, 0, 262, 330, 0, 392, 0, 0, 0, 196, 0, 0, 0], 
+    speed: 0.15 
+  },
+  about: { 
+    // Simplified Underground theme
+    notes: [131, 262, 110, 220, 117, 233, 0, 0], 
+    speed: 0.2 
+  },
+  projects: { 
+    // Castle theme (tense)
+    notes: [147, 156, 165, 175, 147, 156, 165, 175, 147, 156, 165, 175], 
+    speed: 0.12 
+  },
+  contact: { 
+    // Final Boss / High speed
+    notes: [196, 262, 330, 392, 196, 262, 330, 392], 
+    speed: 0.1 
+  }
+};
+
+let musicInterval: ReturnType<typeof setInterval> | null = null;
+
+export function stopBackgroundMusic() {
+  musicActive = false;
+  if (musicInterval) clearInterval(musicInterval);
+  currentMusicSource.forEach(o => { try { o.stop(); } catch {} });
+  currentMusicSource = [];
+}
+
+export function playBackgroundMusic(worldId: string) {
+  if (worldId === currentWorldId && musicActive) return;
+  
+  stopBackgroundMusic();
+  if (_isMuted) return;
+
+  const theme = MELODIES[worldId] || MELODIES.hero;
+  currentWorldId = worldId;
+  musicActive = true;
+  
+  const ctx = getCtx();
+  let step = 0;
+
+  musicInterval = setInterval(() => {
+    if (!musicActive || _isMuted) return;
+    
+    const freq = theme.notes[step % theme.notes.length];
+    if (freq > 0) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = worldId === 'about' ? 'triangle' : 'square';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + theme.speed * 0.9);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + theme.speed);
+      currentMusicSource.push(osc);
+      
+      // Cleanup old oscillators
+      if (currentMusicSource.length > 20) currentMusicSource.shift();
+    }
+    step++;
+  }, theme.speed * 1000);
+}

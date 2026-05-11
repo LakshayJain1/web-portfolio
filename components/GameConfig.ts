@@ -56,6 +56,8 @@ export interface WorldConfig {
   groundType: 'ground' | 'ground_blue' | 'ground_green';
 }
 
+export const TERRAIN_GROUND_DEPTH = 120;
+
 export function resetAllWorlds() {
   Object.values(WORLD_DATA).forEach(world => {
     world.blocks?.forEach(b => {
@@ -111,7 +113,7 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
   about: { 
     width: 2200, 
     startX: 100, 
-    pipes: [{x: 1800, to: 'projects'}],
+    pipes: [{x: 1800, to: 'skills'}],
     theme: 'underground',
     skyColor: '#000000',
     groundType: 'ground_blue',
@@ -125,16 +127,37 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
       { x: 400, yOffset: 140 },
       { x: 450, yOffset: 110 },
       { x: 500, yOffset: 80 },
-      { x: 1200, yOffset: 80 },
-      { x: 1250, yOffset: 80 },
-      { x: 1300, yOffset: 80 },
     ],
     enemies: [
       { id: 'a1', type: 'goomba', x: 600, yOffset: 0, dir: -1 },
       { id: 'a2', type: 'koopa', x: 1000, yOffset: 0, dir: -1 },
     ],
     powerUpBoxes: [
-      { x: 900, yOffset: 160, powerUp: 'flower' },
+      { x: 900, yOffset: 160, powerUp: 'mushroom' },
+    ]
+  },
+  skills: { 
+    width: 2400, 
+    startX: 100, 
+    pipes: [{x: 2000, to: 'projects'}],
+    theme: 'overworld',
+    skyColor: '#5C94FC',
+    groundType: 'ground',
+    blocks: [
+      { x: 400, yOffset: 160, isEasterEgg: true },
+    ],
+    coins: [
+      { x: 500, yOffset: 100 },
+      { x: 550, yOffset: 100 },
+      { x: 600, yOffset: 100 },
+    ],
+    enemies: [
+      { id: 's1', type: 'goomba', x: 800, yOffset: 0, dir: -1 },
+      { id: 's2', type: 'goomba', x: 1400, yOffset: 0, dir: -1 },
+    ],
+    powerUpBoxes: [
+      { x: 600, yOffset: 160, powerUp: 'mushroom' }, // Unlocks Tier 2
+      { x: 1200, yOffset: 160, powerUp: 'flower' },  // Unlocks Tier 3
     ]
   },
   projects: { 

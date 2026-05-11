@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react';
 import { ProjectData, resetAllWorlds } from './GameConfig';
 
 interface CoinPop {
@@ -12,6 +12,8 @@ interface CoinPop {
 
 export type GameState = "idle" | "exiting" | "transitioning" | "entering";
 export type PowerUpEffect = "none" | "flower";
+
+export const ORDERED_WORLDS = ['hero', 'about', 'skills', 'projects', 'services', 'contact'];
 
 interface GameContextType {
   coins: number;
@@ -35,7 +37,20 @@ interface GameContextType {
   toggleMute: () => void;
   onboardingDismissed: boolean;
   dismissOnboarding: () => void;
+  gameInteractionStarted: boolean;
+  markGameInteractionStarted: () => void;
   fullReset: () => void;
+  navigateToNextWorld: () => void;
+  unlockedAbout: boolean;
+  setUnlockedAbout: (v: boolean) => void;
+  /** About profile: terminal-style decrypt in progress after hitting a secret ? block */
+  aboutDecrypting: boolean;
+  setAboutDecrypting: (v: boolean) => void;
+  unlockedSkillsTiers: number;
+  setUnlockedSkillsTiers: (v: number | ((prev: number) => number)) => void;
+  /** Bumped when in-game blocks mutate so UI can re-read WORLD_DATA (e.g. project ? hits). */
+  worldDataEpoch: number;
+  bumpWorldDataEpoch: () => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -57,6 +72,28 @@ export function GameProvider({ children }: { children: ReactNode }) {
     return false;
   });
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+  const [gameInteractionStarted, setGameInteractionStarted] = useState(false);
+  const [unlockedAbout, setUnlockedAbout] = useState(false);
+  const [aboutDecrypting, setAboutDecrypting] = useState(false);
+  const [unlockedSkillsTiers, setUnlockedSkillsTiers] = useState(1);
+  const [worldDataEpoch, setWorldDataEpoch] = useState(0);
+
+  const bumpWorldDataEpoch = useCallback(() => {
+    setWorldDataEpoch((n) => n + 1);
+  }, []);
+
+  const navigateToNextWorld = useCallback(() => {
+    const currentIndex = ORDERED_WORLDS.indexOf(activeWorld);
+    if (currentIndex !== -1 && currentIndex < ORDERED_WORLDS.length - 1) {
+      const nextWorld = ORDERED_WORLDS[currentIndex + 1];
+      const element = document.getElementById(nextWorld);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        // Set a small delay before updating activeWorld to allow scroll to start
+        setTimeout(() => setActiveWorld(nextWorld), 300);
+      }
+    }
+  }, [activeWorld]);
 
   const fullReset = useCallback(() => {
     resetAllWorlds();
@@ -64,6 +101,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setScore(0);
     setLives(5);
     setPowerUpEffect('none');
+    setUnlockedAbout(false);
+    setAboutDecrypting(false);
+    setUnlockedSkillsTiers(1);
+    setGameInteractionStarted(false);
+    setActiveWorld('hero');
+    setWorldDataEpoch((n) => n + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const toggleMute = useCallback(() => {
@@ -80,6 +124,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setOnboardingDismissed(true);
   }, []);
 
+  const markGameInteractionStarted = useCallback(() => {
+    setGameInteractionStarted(true);
+  }, []);
+
   const triggerNavigation = useCallback((targetWorld: string) => {
     setPendingWorld(targetWorld);
     setGameState('exiting');
@@ -94,7 +142,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     // Position the pop at the coin's screen position
     const worldContainer = document.getElementById('world-container');
     let screenX = worldX;
-    let screenY = worldY;
+    const screenY = worldY;
     if (worldContainer) {
       const transform = worldContainer.style.transform;
       const match = transform.match(/translateX\((-?[\d.]+)px\)/);
@@ -122,18 +170,71 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }, 900);
   }, []);
 
+  const contextValue = useMemo<GameContextType>(
+    () => ({
+      coins,
+      score,
+      coinPops,
+      collectCoin,
+      addScore,
+      activeWorld,
+      setActiveWorld,
+      pendingWorld: null,
+      activePopup,
+      setActivePopup,
+      gameState,
+      setGameState,
+      triggerNavigation,
+      lives,
+      setLives,
+      powerUpEffect,
+      setPowerUpEffect,
+      isMuted,
+      toggleMute,
+      onboardingDismissed,
+      dismissOnboarding,
+      gameInteractionStarted,
+      markGameInteractionStarted,
+      fullReset,
+      navigateToNextWorld,
+      unlockedAbout,
+      setUnlockedAbout,
+      aboutDecrypting,
+      setAboutDecrypting,
+      unlockedSkillsTiers,
+      setUnlockedSkillsTiers,
+      worldDataEpoch,
+      bumpWorldDataEpoch,
+    }),
+    [
+      coins,
+      score,
+      coinPops,
+      collectCoin,
+      addScore,
+      activeWorld,
+      activePopup,
+      gameState,
+      lives,
+      powerUpEffect,
+      isMuted,
+      onboardingDismissed,
+      gameInteractionStarted,
+      unlockedAbout,
+      aboutDecrypting,
+      unlockedSkillsTiers,
+      worldDataEpoch,
+      bumpWorldDataEpoch,
+      navigateToNextWorld,
+      fullReset,
+      toggleMute,
+      dismissOnboarding,
+      markGameInteractionStarted,
+    ]
+  );
+
   return (
-    <GameContext.Provider value={{ 
-      coins, score, coinPops, collectCoin, addScore, 
-      activeWorld, setActiveWorld, pendingWorld,
-      activePopup, setActivePopup, 
-      gameState, setGameState, triggerNavigation,
-      lives, setLives,
-      powerUpEffect, setPowerUpEffect,
-      isMuted, toggleMute,
-      onboardingDismissed, dismissOnboarding,
-      fullReset
-    }}>
+    <GameContext.Provider value={contextValue}>
       {children}
     </GameContext.Provider>
   );
