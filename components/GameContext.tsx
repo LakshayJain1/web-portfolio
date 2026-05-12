@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react';
-import { ProjectData, resetAllWorlds } from './GameConfig';
+import { ProjectData, SkillData, resetAllWorlds } from './GameConfig';
 
 interface CoinPop {
   id: number;
@@ -13,7 +13,7 @@ interface CoinPop {
 export type GameState = "idle" | "exiting" | "transitioning" | "entering";
 export type PowerUpEffect = "none" | "flower";
 
-export const ORDERED_WORLDS = ['hero', 'about', 'skills', 'projects', 'services', 'contact'];
+export const ORDERED_WORLDS = ['hero', 'about', 'skills', 'projects', 'contact'];
 
 interface GameContextType {
   coins: number;
@@ -26,6 +26,8 @@ interface GameContextType {
   pendingWorld: string | null;
   activePopup: ProjectData | null;
   setActivePopup: (popup: ProjectData | null) => void;
+  activeSkill: SkillData | null;
+  setActiveSkill: (skill: SkillData | null) => void;
   gameState: GameState;
   setGameState: (state: GameState) => void;
   triggerNavigation: (targetWorld: string) => void;
@@ -51,6 +53,7 @@ interface GameContextType {
   /** Bumped when in-game blocks mutate so UI can re-read WORLD_DATA (e.g. project ? hits). */
   worldDataEpoch: number;
   bumpWorldDataEpoch: () => void;
+  isGamePaused: boolean;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -62,6 +65,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [activeWorld, setActiveWorld] = useState('hero');
   const [pendingWorld, setPendingWorld] = useState<string | null>(null);
   const [activePopup, setActivePopup] = useState<ProjectData | null>(null);
+  const [activeSkill, setActiveSkill] = useState<SkillData | null>(null);
   const [gameState, setGameState] = useState<GameState>('idle');
   const [lives, setLives] = useState(5);
   const [powerUpEffect, setPowerUpEffect] = useState<PowerUpEffect>('none');
@@ -77,6 +81,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [aboutDecrypting, setAboutDecrypting] = useState(false);
   const [unlockedSkillsTiers, setUnlockedSkillsTiers] = useState(1);
   const [worldDataEpoch, setWorldDataEpoch] = useState(0);
+
+  const isGamePaused = useMemo(() => {
+    return activePopup !== null || activeSkill !== null || aboutDecrypting;
+  }, [activePopup, activeSkill, aboutDecrypting]);
 
   const bumpWorldDataEpoch = useCallback(() => {
     setWorldDataEpoch((n) => n + 1);
@@ -104,6 +112,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setUnlockedAbout(false);
     setAboutDecrypting(false);
     setUnlockedSkillsTiers(1);
+    setActiveSkill(null);
+    setActivePopup(null);
     setGameInteractionStarted(false);
     setActiveWorld('hero');
     setWorldDataEpoch((n) => n + 1);
@@ -182,6 +192,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       pendingWorld: null,
       activePopup,
       setActivePopup,
+      activeSkill,
+      setActiveSkill,
       gameState,
       setGameState,
       triggerNavigation,
@@ -205,6 +217,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       setUnlockedSkillsTiers,
       worldDataEpoch,
       bumpWorldDataEpoch,
+      isGamePaused,
     }),
     [
       coins,
@@ -214,6 +227,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       addScore,
       activeWorld,
       activePopup,
+      activeSkill,
       gameState,
       lives,
       powerUpEffect,
@@ -225,6 +239,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       unlockedSkillsTiers,
       worldDataEpoch,
       bumpWorldDataEpoch,
+      isGamePaused,
       navigateToNextWorld,
       fullReset,
       toggleMute,

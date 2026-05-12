@@ -7,10 +7,19 @@ export interface ProjectData {
   caseStudy?: string;
 }
 
+export interface SkillData {
+  id: string;
+  title: string;
+  type: string;
+  description: string;
+  techStack: string[];
+}
+
 export interface BlockData {
   x: number;
   yOffset: number;
   project?: ProjectData;
+  skill?: SkillData;
   isEasterEgg?: boolean;
   // Runtime state for bounce animation
   bounceTime?: number;
@@ -75,17 +84,15 @@ export function resetAllWorlds() {
     });
     world.enemies?.forEach(e => {
       delete e.isDead;
-      // Reset enemy position to original if possible (assuming x is starting x)
-      // Actually we don't have starting x separate, but let's at least revive them
     });
   });
 }
 
 export const WORLD_DATA: Record<string, WorldConfig> = {
   hero: { 
-    width: 2000, 
+    width: 1600, 
     startX: 100, 
-    pipes: [{x: 1500, to: 'about'}],
+    pipes: [{x: 1450, to: 'about'}],
     theme: 'overworld',
     skyColor: '#5C94FC',
     groundType: 'ground',
@@ -111,15 +118,15 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
     ]
   },
   about: { 
-    width: 2200, 
+    width: 1600, 
     startX: 100, 
-    pipes: [{x: 1800, to: 'skills'}],
+    pipes: [{x: 1450, to: 'skills'}],
     theme: 'underground',
     skyColor: '#000000',
     groundType: 'ground_blue',
     blocks: [
-      { x: 400, yOffset: 160, isEasterEgg: true },
-      { x: 432, yOffset: 160, isEasterEgg: true },
+      { x: 400, yOffset: 160 },
+      { x: 432, yOffset: 160 },
     ],
     coins: [
       { x: 300, yOffset: 80 },
@@ -133,37 +140,72 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
       { id: 'a2', type: 'koopa', x: 1000, yOffset: 0, dir: -1 },
     ],
     powerUpBoxes: [
-      { x: 900, yOffset: 160, powerUp: 'mushroom' },
+      { x: 900, yOffset: 160, powerUp: 'mushroom', isEasterEgg: true },
     ]
   },
   skills: { 
-    width: 2400, 
+    width: 1600, 
     startX: 100, 
-    pipes: [{x: 2000, to: 'projects'}],
+    pipes: [{x: 1450, to: 'projects'}],
     theme: 'overworld',
     skyColor: '#5C94FC',
     groundType: 'ground',
     blocks: [
-      { x: 400, yOffset: 160, isEasterEgg: true },
+      { 
+        x: 400, yOffset: 160, 
+        skill: {
+          id: 'web_dev',
+          title: 'Web Development',
+          type: 'CORE ENGINE',
+          description: 'Building dynamic, responsive web applications with clean architecture.',
+          techStack: ['React', 'Next.js', 'TypeScript', 'Node.js']
+        }
+      },
+      { 
+        x: 600, yOffset: 160, 
+        skill: {
+          id: 'ui_ux',
+          title: 'UI/UX Design',
+          type: 'CREATIVE ABILITY',
+          description: 'Crafting beautiful, user-centred interfaces from wireframe to prototype.',
+          techStack: ['Figma', 'Framer', 'User Research', 'Prototyping']
+        }
+      },
+      { 
+        x: 800, yOffset: 160, 
+        skill: {
+          id: 'ai_automation',
+          title: 'AI Automations',
+          type: 'INTELLIGENT WORKFLOWS',
+          description: 'Building autonomous AI agents and complex workflow automations.',
+          techStack: ['n8n', 'Zapier', 'Claude API', 'LangChain']
+        }
+      },
+      { 
+        x: 1000, yOffset: 160, 
+        skill: {
+          id: 'system_design',
+          title: 'System Design',
+          type: 'ARCHITECTURAL DESIGN',
+          description: 'Designing scalable architectures and robust system integrations.',
+          techStack: ['AWS', 'Microservices', 'Docker', 'System Design']
+        }
+      },
     ],
     coins: [
       { x: 500, yOffset: 100 },
-      { x: 550, yOffset: 100 },
-      { x: 600, yOffset: 100 },
+      { x: 700, yOffset: 100 },
+      { x: 900, yOffset: 100 },
     ],
     enemies: [
-      { id: 's1', type: 'goomba', x: 800, yOffset: 0, dir: -1 },
-      { id: 's2', type: 'goomba', x: 1400, yOffset: 0, dir: -1 },
-    ],
-    powerUpBoxes: [
-      { x: 600, yOffset: 160, powerUp: 'mushroom' }, // Unlocks Tier 2
-      { x: 1200, yOffset: 160, powerUp: 'flower' },  // Unlocks Tier 3
+      { id: 's1', type: 'goomba', x: 500, yOffset: 0, dir: -1 },
+      { id: 's2', type: 'goomba', x: 1200, yOffset: 0, dir: -1 },
     ]
   },
   projects: { 
-    width: 3500, 
+    width: 2800, 
     startX: 100, 
-    pipes: [{x: 3000, to: 'contact'}],
+    pipes: [{x: 2600, to: 'contact'}],
     theme: 'forest',
     skyColor: '#5C94FC',
     groundType: 'ground_green',
@@ -210,7 +252,6 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
       },
     ],
     coins: [
-      // Coin arcs between project blocks
       { x: 650, yOffset: 80 },
       { x: 700, yOffset: 100 },
       { x: 750, yOffset: 120 },
@@ -240,30 +281,22 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
     ]
   },
   contact: { 
-    width: 2000, 
+    width: 1600, 
     startX: 100, 
     pipes: [],
     theme: 'night',
-    skyColor: '#000000',
-    groundType: 'ground',
+    skyColor: '#0A0A12',
+    groundType: 'ground_blue',
     blocks: [
-      { x: 400, yOffset: 160, isEasterEgg: true },
-      { x: 700, yOffset: 160, isEasterEgg: true },
+      { x: 800, yOffset: 160, isEasterEgg: true },
     ],
     coins: [
-      { x: 300, yOffset: 80 },
-      { x: 350, yOffset: 110 },
-      { x: 400, yOffset: 140 },
-      { x: 500, yOffset: 80 },
-      { x: 700, yOffset: 140 },
-      { x: 800, yOffset: 80 },
+      { x: 400, yOffset: 80 },
+      { x: 1200, yOffset: 80 },
     ],
     enemies: [
       { id: 'c1', type: 'goomba', x: 600, yOffset: 0, dir: -1 },
-      { id: 'c2', type: 'koopa', x: 900, yOffset: 0, dir: -1 },
-    ],
-    powerUpBoxes: [
-      { x: 500, yOffset: 160, powerUp: 'mushroom' },
+      { id: 'c2', type: 'koopa', x: 1000, yOffset: 0, dir: -1 },
     ]
   }
 };

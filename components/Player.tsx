@@ -82,7 +82,9 @@ const MARIO_FRAMES = [
     [E, E, P.T1, P.T1, P.T1, E, E, E, P.T1, P.T1, E, E],
     [P.T1, P.T1, P.T1, P.T1, E, E, E, E, P.T1, P.T1, P.T1, P.T1]
   ],
-];// Mario pixel dimensions — scale 5 for cleaner world-to-character ratio
+];
+
+// Mario pixel dimensions — scale 5 for cleaner world-to-character ratio
 const MARIO_SCALE = 5;
 const PIXEL_COLS = 12;
 const PIXEL_ROWS = 16;
@@ -145,7 +147,7 @@ export default function Player() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const {
-    activeWorld, collectCoin, setActivePopup,
+    activeWorld, collectCoin, setActivePopup, setActiveSkill,
     addScore,
     setLives,
     navigateToNextWorld,
@@ -154,6 +156,7 @@ export default function Player() {
     unlockedSkillsTiers, setUnlockedSkillsTiers,
     markGameInteractionStarted,
     bumpWorldDataEpoch,
+    isGamePaused,
   } = useGame();
 
   const isTransitioning = useRef(false);
@@ -241,21 +244,11 @@ export default function Player() {
       }
 
       const config = WORLD_DATA[activeWorld];
-      if (!config) { animationId = requestAnimationFrame(loop); return; }
+      const currentWorldWidth = config ? Math.max(config.width || 0, window.innerWidth) : window.innerWidth;
 
-      const currentWorldWidth = Math.max(config.width || 0, window.innerWidth);
+      if (!isGamePaused && config) {
 
-      if (!isTransitioning.current && s.x > currentWorldWidth - 100) {
-        isTransitioning.current = true;
-        navigateToNextWorld();
-        setTimeout(() => {
-          s.x = 100;
-          s.y = GROUND_Y;
-          isTransitioning.current = false;
-        }, 1200);
-      }
-
-      const SPEED = isTransitioning.current ? 0 : 380; // Slightly slower for better control
+      const SPEED = isTransitioning.current ? 0 : 460;
       const GRAVITY = 2800;
       const JUMP_FORCE = -920;
       const MAX_FALL = 1000;
@@ -291,6 +284,21 @@ export default function Player() {
       let nextY = s.y + s.vy * dt;
 
       if (nextX < 0) nextX = 0;
+      
+      // Prevent Mario from walking too far into the abyss
+      // Trigger transition if he reaches the world end OR goes slightly off-screen on wide worlds
+      const edgeTrigger = Math.min(config.width - 50, window.innerWidth + 150);
+      
+      if (!isTransitioning.current && nextX > edgeTrigger) {
+        isTransitioning.current = true;
+        navigateToNextWorld();
+        setTimeout(() => {
+          s.x = 100;
+          s.y = GROUND_Y;
+          isTransitioning.current = false;
+        }, 1200);
+      }
+
       if (nextX > currentWorldWidth - MARIO_W) nextX = currentWorldWidth - MARIO_W;
 
       if (nextY >= GROUND_Y) {
@@ -303,7 +311,6 @@ export default function Player() {
       if (s.vy < 0) {
         const blocks = [...(config.blocks || []), ...(config.powerUpBoxes || [])];
         for (const b of blocks) {
-          // Align with WorldTerrain: block bottom = groundY - yOffset (40px tile above that line)
           const bBottom = groundSurfaceY - b.yOffset;
           const bLeft = b.x;
           const bRight = b.x + BLOCK_SIZE;
@@ -320,7 +327,6 @@ export default function Player() {
                   bumpWorldDataEpoch();
                 }
                 
-                // About profile: only secret ? blocks start decrypt; delayed reveal for suspense
                 if (
                   activeWorld === 'about' &&
                   b.isEasterEgg &&
@@ -337,11 +343,12 @@ export default function Player() {
                 if ('project' in b && b.project) {
                   playPowerUp();
                   setTimeout(() => { setActivePopup(b.project!); }, 400);
+                } else if ('skill' in b && b.skill) {
+                  playPowerUp();
+                  setTimeout(() => { setActiveSkill(b.skill!); }, 400);
                 } else if ('powerUp' in b) {
                   playPowerUp();
-                  if (activeWorld === 'skills') {
-                    setUnlockedSkillsTiers((prev: number) => Math.min(prev + 1, 3));
-                  } else if (b.powerUp === 'mushroom') {
+                  if (b.powerUp === 'mushroom') {
                     setLives((l: number) => Math.min(l + 1, 99));
                   }
                 }
@@ -396,10 +403,20 @@ export default function Player() {
       for (const p of config.pipes) {
         if (nextX + MARIO_W > p.x && nextX < p.x + 64 && Math.abs(nextY - GROUND_Y) < 10) {
           if (K.ArrowDown || K.KeyS) {
-            if (activeWorld === 'about' && unlockedAboutRef.current) {
+            const isUnlocked = 
+              activeWorld === 'hero' || 
+              (activeWorld === 'about' && unlockedAboutRef.current) ||
+              (activeWorld === 'skills' && unlockedSkillsTiersRef.current >= 3) ||
+              ['projects'].includes(activeWorld);
+
+            if (isUnlocked && !isTransitioning.current) {
+              isTransitioning.current = true;
               navigateToNextWorld();
-            } else if (activeWorld === 'skills' && unlockedSkillsTiersRef.current >= 3) {
-              navigateToNextWorld();
+              setTimeout(() => {
+                s.x = 100;
+                s.y = GROUND_Y;
+                isTransitioning.current = false;
+              }, 1200);
             }
           }
         }
@@ -412,14 +429,15 @@ export default function Player() {
         s.animState = 'jump';
       } else if (Math.abs(s.vx) > 0) {
         s.animState = 'walk';
-        s.frameTimer += dt * 10;
+        s.frameTimer += dt * 12;
         if (s.frameTimer > 1) { s.walkFrame++; s.frameTimer = 0; }
       } else {
         s.animState = 'idle';
         s.idleBreathTimer += dt;
       }
+    }
 
-      const frame = s.animState === 'jump' ? 2 : (s.animState === 'walk' ? s.walkFrame % 3 : 0);
+    const frame = s.animState === 'jump' ? 2 : (s.animState === 'walk' ? s.walkFrame % 3 : 0);
       drawMarioFrame(ctx, frame, MARIO_SCALE, s.dir === -1);
 
       const isBooted = typeof window !== 'undefined' && sessionStorage.getItem('nexus-booted') === 'true';
@@ -435,7 +453,7 @@ export default function Player() {
 
     animationId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animationId);
-  }, [collectCoin, activeWorld, setActivePopup, setLives, addScore, navigateToNextWorld, setUnlockedAbout, setAboutDecrypting, setUnlockedSkillsTiers, bumpWorldDataEpoch, markGameInteractionStarted]);
+  }, [collectCoin, activeWorld, setActivePopup, setActiveSkill, setLives, addScore, navigateToNextWorld, setUnlockedAbout, setAboutDecrypting, setUnlockedSkillsTiers, bumpWorldDataEpoch, markGameInteractionStarted, isGamePaused]);
 
   return (
     <>

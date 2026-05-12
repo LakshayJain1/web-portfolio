@@ -55,7 +55,6 @@ export default function Navbar() {
     { id: 'about', label: 'ABOUT' },
     { id: 'skills', label: 'SKILLS' },
     { id: 'projects', label: 'PROJECTS' },
-    { id: 'services', label: 'SERVICES' },
     { id: 'contact', label: 'CONTACT' },
   ];
 

@@ -7,9 +7,9 @@ import HeroSection from '../components/sections/HeroSection';
 import AboutSection from '../components/sections/AboutSection';
 import SkillsSection from '../components/sections/SkillsSection';
 import ProjectsSection from '../components/sections/ProjectsSection';
-import ServicesSection from '../components/sections/ServicesSection';
 import ContactSection from '../components/sections/ContactSection';
 import Player from '../components/Player';
+import ProjectPopup from '../components/ProjectPopup';
 import { useGame } from '../components/GameContext';
 import { playBackgroundMusic } from '../components/SoundManager';
 
@@ -18,7 +18,6 @@ const WORLD_MAP: Record<string, string> = {
   about: 'about',
   skills: 'skills',
   projects: 'projects',
-  services: 'hero',
   contact: 'contact',
 };
 
@@ -82,7 +81,7 @@ export default function Home() {
       { threshold: 0.45 }
     );
 
-    const sections = ['hero', 'about', 'skills', 'projects', 'services', 'contact'];
+    const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -107,11 +106,11 @@ export default function Home() {
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
-        <ServicesSection />
         <ContactSection />
       </main>
 
       <Player />
+      <ProjectPopup />
       <CoinPopup />
     </div>
   );

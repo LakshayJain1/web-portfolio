@@ -141,6 +141,28 @@ body {
   -webkit-user-select: none;
 }
 
+/* ─── Custom Scrollbar (Retro Pixel Style) ────────────────── */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border-dim);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface);
+  border: 2px solid var(--bg-deep);
+  outline: 1px solid var(--border-dim);
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--coin);
+}
+
 /* ─── GLOBAL CRT LAYER SYSTEM ─────────────────── */
 /* Global CRT phosphor texture and vignette */
 body::before {
