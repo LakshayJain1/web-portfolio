@@ -148,47 +148,47 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
     startX: 100, 
     pipes: [{x: 1450, to: 'projects'}],
     theme: 'overworld',
-    skyColor: '#5C94FC',
-    groundType: 'ground',
+    skyColor: '#0A0A1F',
+    groundType: 'ground_green',
     blocks: [
       { 
         x: 400, yOffset: 160, 
         skill: {
           id: 'web_dev',
-          title: 'Web Development',
-          type: 'CORE ENGINE',
-          description: 'Building dynamic, responsive web applications with clean architecture.',
-          techStack: ['React', 'Next.js', 'TypeScript', 'Node.js']
+          title: 'Fullstack Systems',
+          type: 'ENGINEERING',
+          description: 'Architecting scalable applications with Next.js 14, TypeScript, and serverless patterns. Expertise in middleware security, ISR strategies, and high-performance hydration cycles.',
+          techStack: ['Next.js', 'React', 'Node.js', 'PostgreSQL', 'Redis']
         }
       },
       { 
         x: 600, yOffset: 160, 
         skill: {
           id: 'ui_ux',
-          title: 'UI/UX Design',
-          type: 'CREATIVE ABILITY',
-          description: 'Crafting beautiful, user-centred interfaces from wireframe to prototype.',
-          techStack: ['Figma', 'Framer', 'User Research', 'Prototyping']
+          title: 'Design Systems',
+          type: 'UX STRATEGY',
+          description: 'Creating cohesive design languages and atomic components. Beyond visuals, I focus on accessibility, tokens, and complex user journey mapping for seamless digital products.',
+          techStack: ['Figma', 'Storybook', 'Framer Motion', 'Tailwind', 'A11y']
         }
       },
       { 
         x: 800, yOffset: 160, 
         skill: {
           id: 'ai_automation',
-          title: 'AI Automations',
-          type: 'INTELLIGENT WORKFLOWS',
-          description: 'Building autonomous AI agents and complex workflow automations.',
-          techStack: ['n8n', 'Zapier', 'Claude API', 'LangChain']
+          title: 'AI Orchestration',
+          type: 'AUTOMATION',
+          description: 'Designing autonomous workflows that bridge LLMs with business logic. Expertise in RAG pipelines, n8n orchestration, and multi-agent systems using Claude & GPT-4.',
+          techStack: ['n8n', 'Python', 'Vector DBs', 'LangChain', 'OpenAI']
         }
       },
       { 
         x: 1000, yOffset: 160, 
         skill: {
           id: 'system_design',
-          title: 'System Design',
-          type: 'ARCHITECTURAL DESIGN',
-          description: 'Designing scalable architectures and robust system integrations.',
-          techStack: ['AWS', 'Microservices', 'Docker', 'System Design']
+          title: 'Portfolio Architecture',
+          type: 'SYSTEM DESIGN',
+          description: 'The blueprint of this portfolio: A decoupled architecture using React Context for global state, a custom Canvas API physics engine, and Framer Motion for high-fidelity UI overlays.',
+          techStack: ['System Design', 'Canvas API', 'Context API', 'State Machines']
         }
       },
     ],
