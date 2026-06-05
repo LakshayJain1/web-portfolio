@@ -9,9 +9,18 @@ const BASE_URL = "https://devlakshay.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "DEV LAKSHAY — Designer, Developer & Digital Storyteller",
+    default: "DEV LAKSHAY | Portfolio",
     template: "%s | DEV LAKSHAY",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
   description:
     "Lakshay Jain is a designer, developer, and digital storyteller creating beautiful, functional, and immersive digital experiences. Specializing in UI/UX, Web Development, 3D Art, and Branding.",
   keywords: [
@@ -92,10 +101,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-      </head>
       <body>
         <div className="crt-scanline" aria-hidden="true" />
         <DeviceGuard>

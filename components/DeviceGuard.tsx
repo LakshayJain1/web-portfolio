@@ -1,9 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import MobileControls from './MobileControls';
 
+const DETAIL_ROUTE_PREFIXES = ['/projects', '/blogs'];
+
 export default function DeviceGuard({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isDetailRoute = DETAIL_ROUTE_PREFIXES.some((prefix) => pathname?.startsWith(prefix));
   const [isMobile, setIsMobile] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
   const [bypass, setBypass] = useState(false);
@@ -19,7 +24,7 @@ export default function DeviceGuard({ children }: { children: React.ReactNode })
     return () => window.removeEventListener('resize', checkSize);
   }, []);
 
-  if (isMobile && !bypass) {
+  if (isMobile && !bypass && !isDetailRoute) {
     return (
       <div className="fixed inset-0 z-[10000] bg-[#000068] flex flex-col items-center justify-center p-8 text-center font-press-start text-white overflow-hidden">
         {/* Animated Warp Pipe */}

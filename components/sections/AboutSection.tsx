@@ -32,6 +32,15 @@ export default function AboutSection() {
   const { unlockedAbout, aboutDecrypting } = useGame();
   const [decryptLines, setDecryptLines] = useState(0);
 
+  const [showServices, setShowServices] = useState(false);
+
+  const servicesList = [
+    "Web Design & Figma UI/UX",
+    "Web Development",
+    "AI Automations (n8n, Make, Zapier)",
+    "3D Modeling (Blender, Maya)"
+  ];
+
   useEffect(() => {
     if (!aboutDecrypting) {
       setDecryptLines(0);
@@ -73,7 +82,8 @@ export default function AboutSection() {
                 {decryptLines >= 2 && <p className="opacity-90">&gt; loading PLAYER.DAT...</p>}
                 {decryptLines >= 3 && <p className="opacity-90">&gt; XOR layer 1... OK</p>}
                 {decryptLines >= 4 && <p className="opacity-90">&gt; verifying checksum...</p>}
-                {decryptLines >= 5 && <p className="text-[var(--coin)]">&gt; PROFILE STREAM READY</p>}
+                {decryptLines >= 5 && <p className="text-[var(--coin)]">&gt; PROFILE STREAM READY<span className="cursor-blink ml-1">_</span></p>}
+                {decryptLines > 0 && decryptLines < 5 && <p className="opacity-90 animate-pulse">&gt; _</p>}
               </div>
               <div className="mt-6 w-full h-2 bg-[var(--border-dim)] overflow-hidden">
                 <motion.div
@@ -122,18 +132,18 @@ export default function AboutSection() {
 
             <motion.div
               variants={stagger.child}
-              className="border border-[var(--border-active)] bg-[rgba(24,24,42,0.85)] backdrop-blur-sm p-6 md:p-10"
+              className="border border-[var(--border-active)] bg-[rgba(24,24,42,0.85)] backdrop-blur-sm p-8 md:p-14 md:pb-20 relative crt-card-overlay overflow-visible"
               style={{ boxShadow: '0 0 30px rgba(255, 215, 0, 0.1), 4px 4px 0 rgba(0, 0, 0, 0.4)' }}
             >
-              <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex flex-col md:flex-row gap-8 relative z-10">
                 <div className="flex flex-col items-center gap-3 flex-shrink-0">
                   <PixelAvatar />
                   <span className="font-pixel text-[6px] text-[var(--text-dim)] tracking-wider">LV.8 DESIGNER</span>
                 </div>
 
                 <div className="flex-1">
-                  <h2 className="font-pixel text-[var(--coin)] text-[clamp(14px,2vw,20px)] mb-4 tracking-wider">
-                    LAKSHAY JAIN
+                  <h2 className="font-pixel text-[var(--coin)] text-[clamp(14px,2vw,20px)] mb-4 tracking-wider flex items-center gap-1.5">
+                    LAKSHAY JAIN<span className="cursor-blink text-[var(--coin)] text-[clamp(14px,2vw,20px)]">█</span>
                   </h2>
                   <p className="font-terminal text-[var(--text-body)] text-[16px] md:text-[18px] leading-relaxed mb-4">
                     I build immersive digital worlds where code meets artistry. Every pixel, every transition, every interaction is intentional.
@@ -148,35 +158,71 @@ export default function AboutSection() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 relative z-10">
                 {[
-                  { num: '1.5–2+', label: 'YRS EXP', color: 'var(--coin)', numClass: 'text-[11px] md:text-[14px]' },
-                  { num: '10–12', label: 'PROJECTS DELIVERED', color: 'var(--accent-cyan)', numClass: 'text-[14px] md:text-[18px]' },
-                  { num: '8', label: 'SERVICES', color: 'var(--mario-red)', numClass: 'text-[16px] md:text-[20px]' },
+                  { num: '1.5+', label: 'YRS EXP', color: 'var(--coin)', numClass: 'text-[14px] md:text-[18px]' },
+                  { num: '8', label: 'PROJECTS DELIVERED', color: 'var(--accent-cyan)', numClass: 'text-[14px] md:text-[18px]' },
+                  { num: '4', label: 'SERVICES', color: 'var(--mario-red)', numClass: 'text-[14px] md:text-[18px]' },
                   { num: '∞', label: 'CREATIVITY', color: 'var(--accent-pipe)', numClass: 'text-[16px] md:text-[20px]' },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="border border-[var(--border-dim)] bg-[rgba(10,10,15,0.5)] p-3 md:p-4 text-center flex flex-col justify-center min-h-[88px]"
-                  >
-                    <div className={`font-pixel ${stat.numClass ?? 'text-[16px] md:text-[20px]'}`} style={{ color: stat.color }}>
-                      {stat.num}
+                ].map((stat) => {
+                  const isServices = stat.label === 'SERVICES';
+                  return (
+                    <div
+                      key={stat.label}
+                      className={`border border-[var(--border-dim)] bg-[rgba(10,10,15,0.5)] p-3 md:p-4 text-center flex flex-col justify-center min-h-[88px] relative select-none ${
+                        isServices ? 'cursor-pointer hover:border-[var(--mario-red)] hover:bg-[rgba(229,32,32,0.03)] transition-colors' : ''
+                      }`}
+                      onMouseEnter={() => isServices && setShowServices(true)}
+                      onMouseLeave={() => isServices && setShowServices(false)}
+                      onClick={() => isServices && setShowServices((prev) => !prev)}
+                    >
+                      <div className={`font-pixel ${stat.numClass ?? 'text-[16px] md:text-[20px]'}`} style={{ color: stat.color }}>
+                        {stat.num}
+                      </div>
+                      <div className="font-pixel text-[5px] md:text-[6px] text-[var(--text-dim)] uppercase mt-2 tracking-wider leading-snug">
+                        {stat.label}
+                      </div>
+
+                      {isServices && (
+                        <AnimatePresence>
+                          {showServices && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                              transition={{ duration: 0.18, ease: 'easeOut' }}
+                              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[280px] md:w-[320px] bg-[rgba(10,10,18,0.98)] border-2 border-[var(--mario-red)] p-4 shadow-[0_0_24px_rgba(229,32,32,0.35)] text-left z-[90] pointer-events-auto"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <span className="font-pixel text-[5px] text-[var(--mario-red)] uppercase tracking-widest block mb-2.5">
+                                Equipped Services
+                              </span>
+                              <ul className="space-y-2">
+                                {servicesList.map((service) => (
+                                  <li key={service} className="font-terminal text-[14px] text-[var(--text-body)] flex items-start gap-2">
+                                    <span className="text-[var(--mario-red)] select-none">▪</span>
+                                    <span>{service}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                              <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-[6px] border-x-transparent border-t-[6px] border-t-[var(--mario-red)]" />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      )}
                     </div>
-                    <div className="font-pixel text-[5px] md:text-[6px] text-[var(--text-dim)] uppercase mt-2 tracking-wider leading-snug">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              <div className="mt-8 flex justify-center w-full">
+              <div className="mt-10 flex justify-center w-full relative z-10">
                 <a
                   href="https://drive.google.com/file/d/19lSjaETHcUer7lcT06HqR2nW8XSeRfrE/view?usp=sharing"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="retro-btn bg-[var(--mario-red)] text-white border-2 border-black shadow-[3px_3px_0_#000] hover:translate-y-[-2px] hover:shadow-[3px_5px_0_#000] active:translate-y-0 active:shadow-none"
+                  className="pixel-btn-red"
                 >
-                  📄 EXTRACT BIO DATA
+                  ▪ EXTRACT BIO DATA
                 </a>
               </div>
             </motion.div>

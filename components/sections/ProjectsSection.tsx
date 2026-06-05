@@ -65,10 +65,10 @@ export default function ProjectsSection() {
               <motion.div
                 key={b.project!.title}
                 variants={projectChild}
-                className="group card cursor-pointer overflow-hidden pointer-events-auto"
+                className="group card cursor-pointer overflow-hidden pointer-events-auto !p-0"
                 onClick={() => setActivePopup(b.project!)}
               >
-                <div className="card-tab" />
+                <div className="h-1.5 w-full bg-[var(--coin)] opacity-[0.65]" />
                 <div className="h-24 md:h-28 bg-[rgba(10,10,22,0.85)] flex items-center justify-center border-b border-[var(--border-dim)] relative overflow-hidden">
                   <div
                     className="absolute inset-0 opacity-[0.05]"

@@ -10,6 +10,7 @@ import ProjectsSection from '../components/sections/ProjectsSection';
 import ContactSection from '../components/sections/ContactSection';
 import Player from '../components/Player';
 import ProjectPopup from '../components/ProjectPopup';
+import SkillPopup from '../components/SkillPopup';
 import { useGame } from '../components/GameContext';
 import { playBackgroundMusic } from '../components/SoundManager';
 
@@ -111,6 +112,7 @@ export default function Home() {
 
       <Player />
       <ProjectPopup />
+      <SkillPopup />
       <CoinPopup />
     </div>
   );

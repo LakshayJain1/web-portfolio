@@ -323,9 +323,7 @@ export default function Player() {
                 b.hit = true;
                 b.bounceTime = performance.now();
                 playBlockBump();
-                if (activeWorld === 'projects') {
-                  bumpWorldDataEpoch();
-                }
+                bumpWorldDataEpoch();
                 
                 if (
                   activeWorld === 'about' &&
@@ -346,6 +344,9 @@ export default function Player() {
                 } else if ('skill' in b && b.skill) {
                   playPowerUp();
                   setTimeout(() => { setActiveSkill(b.skill!); }, 400);
+                  const skillBlocks = config.blocks?.filter(block => 'skill' in block) || [];
+                  const hitCount = skillBlocks.filter(block => block.hit).length;
+                  setUnlockedSkillsTiers(Math.min(hitCount, 3));
                 } else if ('powerUp' in b) {
                   playPowerUp();
                   if (b.powerUp === 'mushroom') {
@@ -403,11 +404,20 @@ export default function Player() {
       for (const p of config.pipes) {
         if (nextX + MARIO_W > p.x && nextX < p.x + 64 && Math.abs(nextY - GROUND_Y) < 10) {
           if (K.ArrowDown || K.KeyS) {
+            const heroBlocks = WORLD_DATA['hero'].blocks || [];
+            const heroUnlocked = heroBlocks.every(block => block.hit);
+            
+            const skillBlocks = WORLD_DATA['skills'].blocks || [];
+            const skillsUnlocked = skillBlocks.every(block => block.hit);
+            
+            const projectBlocks = WORLD_DATA['projects'].blocks || [];
+            const projectsUnlocked = projectBlocks.every(block => block.hit);
+
             const isUnlocked = 
-              activeWorld === 'hero' || 
+              (activeWorld === 'hero' && heroUnlocked) ||
               (activeWorld === 'about' && unlockedAboutRef.current) ||
-              (activeWorld === 'skills' && unlockedSkillsTiersRef.current >= 3) ||
-              ['projects'].includes(activeWorld);
+              (activeWorld === 'skills' && skillsUnlocked) ||
+              (activeWorld === 'projects' && projectsUnlocked);
 
             if (isUnlocked && !isTransitioning.current) {
               isTransitioning.current = true;

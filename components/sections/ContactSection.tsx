@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import WorldTerrain from '../WorldTerrain';
+import BlogPopup from '../BlogPopup';
 import { useGame } from '../GameContext';
 
 export default function ContactSection() {
   const { addScore } = useGame();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [blogPopupOpen, setBlogPopupOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,8 +147,21 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Social Links */}
+          {/* Blog + Social Links */}
           <div className="mt-12 flex flex-wrap gap-4 justify-center">
+            <button
+              type="button"
+              onClick={() => setBlogPopupOpen(true)}
+              className="font-pixel text-[10px] text-[var(--coin)] border border-[var(--coin)] px-5 py-3 hover:bg-[var(--coin)] hover:text-black transition-colors tracking-wider bg-[rgba(255,215,0,0.05)]"
+            >
+              ▶ DATA LOGS
+            </button>
+            <Link
+              href="/blogs"
+              className="font-pixel text-[10px] text-[var(--text-dim)] border border-[var(--border-dim)] px-5 py-3 hover:text-[var(--coin)] hover:border-[var(--coin)] transition-colors tracking-wider bg-[rgba(255,255,255,0.03)]"
+            >
+              ALL LOGS
+            </Link>
             {[
               { label: 'INSTAGRAM', href: 'https://www.instagram.com/lakshayjain986/' },
               { label: 'DRIBBBLE', href: 'https://dribbble.com/Lakshay123X' },
@@ -175,6 +191,8 @@ export default function ContactSection() {
           </div>
         </motion.div>
       </div>
+
+      <BlogPopup open={blogPopupOpen} onClose={() => setBlogPopupOpen(false)} />
     </section>
   );
 }

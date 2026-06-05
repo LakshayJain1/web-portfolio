@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from './GameContext';
 
@@ -15,7 +16,7 @@ export default function ProjectPopup() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[4000] flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md"
+        className="fixed inset-0 z-[6000] flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md"
         onClick={() => setActivePopup(null)}
       >
         <motion.div
@@ -67,9 +68,16 @@ export default function ProjectPopup() {
             >
               VIEW LIVE PROJECT
             </a>
+            <Link
+              href={`/projects/${activePopup.slug}`}
+              onClick={() => setActivePopup(null)}
+              className="flex-1 py-4 border-2 border-[var(--coin)] text-[var(--coin)] font-pixel text-[7px] text-center hover:bg-[var(--coin)]/10 transition-colors"
+            >
+              READ CASE STUDY
+            </Link>
             <button 
               onClick={() => setActivePopup(null)}
-              className="flex-1 py-4 border-2 border-[var(--coin)] text-[var(--coin)] font-pixel text-[7px] hover:bg-[var(--coin)]/10 transition-colors"
+              className="flex-1 py-4 border-2 border-[var(--border-dim)] text-[var(--text-dim)] font-pixel text-[7px] hover:border-[var(--coin)] hover:text-[var(--coin)] transition-colors"
             >
               RESUME GAME
             </button>

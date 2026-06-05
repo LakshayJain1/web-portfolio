@@ -1,11 +1,6 @@
-export interface ProjectData {
-  title: string;
-  type: string;
-  description: string;
-  techStack: string[];
-  link: string;
-  caseStudy?: string;
-}
+import { PROJECTS, type ProjectData } from '../data/projects';
+
+export type { ProjectData };
 
 export interface SkillData {
   id: string;
@@ -210,46 +205,10 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
     skyColor: '#5C94FC',
     groundType: 'ground_green',
     blocks: [
-      { 
-        x: 500, yOffset: 160, 
-        project: {
-          title: 'RESXUME',
-          type: 'WEB DESIGN',
-          description: 'A sleek resume-builder web product with clean layout, smooth interactions and conversion-focused UX.',
-          techStack: ['React', 'Framer', 'Figma', 'CSS'],
-          link: 'https://devlakshay.framer.ai/#projects',
-        }
-      },
-      { 
-        x: 1000, yOffset: 160, 
-        project: {
-          title: 'JUICE FACTORY',
-          type: 'PROTOTYPING',
-          description: 'A vibrant brand & interactive Framer prototype for a fresh juice business — full UX from landing to checkout.',
-          techStack: ['Framer', 'Figma', 'Branding', 'Prototype'],
-          link: 'https://devlakshay.framer.ai/#projects',
-        }
-      },
-      { 
-        x: 1500, yOffset: 160, 
-        project: {
-          title: 'DEVYUT',
-          type: 'WEB DESIGN',
-          description: 'A professional tech-company website with dark aesthetic, 3D accents and polished component system.',
-          techStack: ['Next.js', 'ThreeJS', 'Figma', 'CSS'],
-          link: 'https://devlakshay.framer.ai/#projects',
-        }
-      },
-      { 
-        x: 2000, yOffset: 160, 
-        project: {
-          title: 'ORDETA',
-          type: 'WEB DEV',
-          description: 'A fully developed product website with dynamic interactions, built from scratch.',
-          techStack: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
-          link: 'https://devlakshay.framer.ai/#projects',
-        }
-      },
+      { x: 500, yOffset: 160, project: PROJECTS[0] },
+      { x: 1000, yOffset: 160, project: PROJECTS[1] },
+      { x: 1500, yOffset: 160, project: PROJECTS[2] },
+      { x: 2000, yOffset: 160, project: PROJECTS[3] },
     ],
     coins: [
       { x: 650, yOffset: 80 },

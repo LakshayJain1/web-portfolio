@@ -222,8 +222,21 @@ export default function WorldTerrain({ worldId }: WorldTerrainProps) {
           ctx.strokeRect(p.x - 4, groundY - 74, 72, 16);
 
           let isLocked = false;
-          if (worldId === 'about' && !unlockedAbout) isLocked = true;
-          if (worldId === 'skills' && unlockedSkillsTiers < 3) isLocked = true;
+          if (worldId === 'hero') {
+            const heroBlocks = WORLD_DATA['hero'].blocks || [];
+            const heroUnlocked = heroBlocks.every(block => block.hit);
+            if (!heroUnlocked) isLocked = true;
+          } else if (worldId === 'about') {
+            if (!unlockedAbout) isLocked = true;
+          } else if (worldId === 'skills') {
+            const skillBlocks = WORLD_DATA['skills'].blocks || [];
+            const skillsUnlocked = skillBlocks.every(block => block.hit);
+            if (!skillsUnlocked) isLocked = true;
+          } else if (worldId === 'projects') {
+            const projectBlocks = WORLD_DATA['projects'].blocks || [];
+            const projectsUnlocked = projectBlocks.every(block => block.hit);
+            if (!projectsUnlocked) isLocked = true;
+          }
 
           if (isLocked) {
             ctx.fillStyle = '#FF0000';
