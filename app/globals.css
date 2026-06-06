@@ -53,6 +53,29 @@
     0%, 100% { visibility: visible; }
     50% { visibility: hidden; }
   }
+
+  --animate-cloud-move: cloudMove 40s linear infinite;
+  --animate-cloud-move-slow: cloudMove 60s linear infinite;
+  --animate-coin-float: coinFloat 1.2s ease-in-out infinite;
+  --animate-star-pulse: starPulse 2s ease-in-out infinite;
+  --animate-qbounce: qbounce 2s ease-in-out infinite;
+
+  @keyframes cloudMove {
+    from { transform: translateX(110vw); }
+    to   { transform: translateX(-200px); }
+  }
+  @keyframes coinFloat {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-8px); }
+  }
+  @keyframes starPulse {
+    0%,100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+    50%     { opacity: 1;   transform: scale(1.2) rotate(20deg); }
+  }
+  @keyframes qbounce {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-4px); }
+  }
 }
 
 /* ─── CSS Custom Properties ──────────────────── */
@@ -797,5 +820,290 @@ canvas {
     0 0 10px rgba(229, 32, 32, 0.6),
     inset -1px -1px 0 0 #901010,
     inset 1px 1px 0 0 #FF5F56;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MARIO BLOG THEME (minimal - mostly Tailwind now)
+   ═══════════════════════════════════════════════════════ */
+
+/* brick pattern for card headers (too complex for Tailwind) */
+.brick-header {
+  background:
+    repeating-linear-gradient(90deg, transparent 0px, transparent 31px, rgba(0,0,0,0.15) 31px, rgba(0,0,0,0.15) 32px),
+    repeating-linear-gradient(180deg, transparent 0px, transparent 15px, rgba(0,0,0,0.1) 15px, rgba(0,0,0,0.1) 16px),
+    linear-gradient(135deg, #C84C0C 0%, #8B3A0A 100%);
+}
+
+/* ? blocks (used by HitBlocks component) */
+.qblock-row {
+  display: flex; justify-content: center; gap: 8px;
+  margin-bottom: 32px;
+}
+.qblock {
+  width: 32px; height: 32px;
+  background: #D87000;
+  border: 3px solid #0A0A0F;
+  box-shadow: inset -3px -3px 0 #9E5000, inset 3px 3px 0 #FFB400;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: 12px; color: #FCFCFC;
+  cursor: pointer;
+  transition: transform 0.08s;
+  user-select: none;
+}
+.qblock:hover { transform: translateY(-4px); }
+.qblock:active { transform: translateY(2px); }
+.qblock.hit {
+  background: #aaa;
+  box-shadow: inset -3px -3px 0 #666, inset 3px 3px 0 #ccc;
+  color: #666;
+}
+
+/* coin pop for ? blocks */
+@keyframes coinPop {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+}
+.coin-pop {
+  position: fixed; pointer-events: none; z-index: 9999;
+  width: 16px; height: 16px;
+  background: #FFD700; border: 3px solid #FFA500;
+  animation: coinPop 0.6s ease-out forwards;
+}
+
+/* ─── Shared tag & btn (used in slug page) ─── */
+.tag {
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  background: rgba(255,215,0,0.15);
+  color: #FFD700;
+  border: 2px solid #FFD700;
+  padding: 4px 8px;
+  letter-spacing: 1px;
+}
+
+.card-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-pixel);
+  font-size: 7px; color: #0A0A0F;
+  background: #FFD700;
+  border: 3px solid #0A0A0F;
+  box-shadow: 3px 3px 0 #0A0A0F;
+  padding: 8px 14px;
+  text-decoration: none;
+  transition: all 0.08s;
+  cursor: pointer;
+}
+.card-btn:hover {
+  background: #FCFCFC;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #0A0A0F;
+}
+.card-btn .arrow { font-size: 12px; }
+
+/* ─── Blog Detail Page ─── */
+.blog-article-wrap {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 100px 24px 80px;
+  position: relative;
+}
+
+.blog-back-nav {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 40px;
+}
+.back-btn {
+  font-family: var(--font-pixel); font-size: 7px;
+  color: #FFD700; border: 3px solid #FFD700;
+  background: transparent; padding: 8px 14px;
+  cursor: pointer; transition: all 0.08s; letter-spacing: 1px;
+}
+.back-btn:hover { background: #FFD700; color: #0A0A0F; }
+.breadcrumb {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; color: rgba(255,255,255,0.4);
+}
+.breadcrumb span { color: #FFD700; }
+
+.blog-meta-bar {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  margin-bottom: 24px;
+}
+.bmeta-world {
+  font-family: var(--font-pixel); font-size: 7px;
+  background: #E52B2B; color: #FCFCFC;
+  border: 3px solid #0A0A0F;
+  padding: 4px 10px; letter-spacing: 1px;
+  box-shadow: 3px 3px 0 #0A0A0F;
+}
+.bmeta-date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; color: rgba(255,255,255,0.5);
+}
+.bmeta-read {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; color: #FFD700;
+}
+
+.blog-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 3vw, 22px);
+  color: #FCFCFC;
+  line-height: 1.6;
+  text-shadow: 3px 3px 0 #E52B2B;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  white-space: pre-line;
+}
+
+.blog-subtitle {
+  font-family: var(--font-terminal);
+  font-size: 24px; color: rgba(255,255,255,0.6);
+  margin-bottom: 32px; line-height: 1.4;
+}
+
+/* coin inline divider */
+.inline-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 32px 0;
+}
+.inline-divider .iline {
+  flex: 1; height: 3px;
+  background: repeating-linear-gradient(90deg, #FFD700 0px, #FFD700 8px, transparent 8px, transparent 16px);
+}
+.inline-divider .icoin {
+  width: 16px; height: 16px;
+  background: #FFD700;
+  border: 3px solid #FFA500;
+  flex-shrink: 0;
+}
+
+/* blog hero image */
+.blog-hero-img {
+  width: 100%; height: 200px;
+  background: repeating-linear-gradient(45deg, #C84C0C 0px, #C84C0C 16px, #8B3A0A 16px, #8B3A0A 32px);
+  border: 3px solid #0A0A0F;
+  box-shadow: 6px 6px 0 #0A0A0F;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.blog-hero-img .pixel-art {
+  font-size: 60px;
+  filter: drop-shadow(4px 4px 0 #0A0A0F);
+}
+.blog-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(10,10,15,0.6) 100%);
+}
+
+/* blog content body */
+.blog-content-body {
+  font-family: var(--font-terminal);
+  font-size: 20px; color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+}
+.blog-content-body h2 {
+  font-family: var(--font-pixel);
+  font-size: 13px; color: #FFD700;
+  text-shadow: 2px 2px 0 #0A0A0F;
+  margin: 36px 0 16px; line-height: 1.6;
+  letter-spacing: 1px;
+}
+.blog-content-body h3 {
+  font-family: var(--font-pixel);
+  font-size: 10px; color: #E52B2B;
+  margin: 28px 0 12px; line-height: 1.6;
+}
+.blog-content-body p { margin-bottom: 20px; }
+.blog-content-body strong { color: #FFD700; font-family: 'Share Tech Mono', monospace; }
+.blog-content-body em { color: #58A800; font-style: normal; }
+.blog-content-body code {
+  font-family: 'Share Tech Mono', monospace;
+  color: #58A800;
+  font-size: 17px;
+}
+
+/* callout */
+.callout {
+  background: rgba(0,168,0,0.12);
+  border-left: 4px solid #58A800;
+  border-top: 2px solid #58A800;
+  padding: 16px 20px;
+  margin: 24px 0;
+  font-family: var(--font-terminal);
+  font-size: 18px; color: rgba(255,255,255,0.9);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+  position: relative;
+}
+.callout::before {
+  content: '★ PRO TIP';
+  font-family: var(--font-pixel);
+  font-size: 6px; color: #58A800;
+  display: block; margin-bottom: 8px; letter-spacing: 2px;
+}
+
+/* code block */
+.code-block {
+  background: #0A0A0F;
+  border: 3px solid #FFD700;
+  box-shadow: 4px 4px 0 #0A0A0F;
+  padding: 16px 20px;
+  margin: 24px 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; color: #58A800;
+  line-height: 1.8;
+  overflow-x: auto;
+  position: relative;
+  white-space: pre-wrap;
+}
+.code-block::before {
+  content: '// CODE.EXE';
+  font-family: var(--font-pixel);
+  font-size: 6px; color: rgba(255,255,255,0.3);
+  display: block; margin-bottom: 10px;
+}
+
+/* blog footer */
+.blog-footer {
+  margin-top: 60px;
+  padding-top: 32px;
+  border-top: 3px dashed rgba(255,215,0,0.3);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.blog-footer-author {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px; color: rgba(255,255,255,0.5);
+}
+.blog-footer-author span { color: #FFD700; }
+
+/* next article */
+.next-article {
+  background: rgba(10,10,20,0.82);
+  border: 3px solid rgba(255,215,0,0.3);
+  box-shadow: 4px 4px 0 #0A0A0F;
+  padding: 20px 24px;
+  margin-top: 40px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.next-article:hover { border-color: #FFD700; transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #0A0A0F; }
+.next-article-label {
+  font-family: var(--font-pixel);
+  font-size: 7px; color: rgba(255,255,255,0.4);
+  letter-spacing: 2px; margin-bottom: 10px;
+}
+.next-article-title {
+  font-family: var(--font-pixel);
+  font-size: 10px; color: #FFD700;
+  line-height: 1.7;
+}
+
+/* responsive */
+@media (max-width: 640px) {
+  .blog-article-wrap { padding: 80px 16px 60px; }
 }
 
