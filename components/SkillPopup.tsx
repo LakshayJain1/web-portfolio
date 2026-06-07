@@ -64,51 +64,76 @@ function N8NFlow() {
   );
 }
 
-function UXProcess() {
+function ThreeDArt() {
   return (
-    <div className="w-full h-full bg-[#F8F9FA] p-6 flex flex-col gap-6 overflow-hidden">
-      {/* Design System Tokens */}
-      <div className="flex justify-between items-end border-b border-gray-200 pb-4">
-        <div className="space-y-2">
-          <span className="text-[8px] font-bold text-gray-400 tracking-tighter block uppercase">Typography System</span>
-          <div className="space-y-1">
-            <h3 className="text-xl font-bold text-gray-900 leading-none">Aa</h3>
-            <p className="text-[10px] text-gray-600 font-medium tracking-tight">Inter / Medium / 24px</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <div className="w-6 h-6 rounded bg-[#0A0A0F]" />
-          <div className="w-6 h-6 rounded bg-[#55CCFF]" />
-          <div className="w-6 h-6 rounded bg-[#FF4F5E]" />
-          <div className="w-6 h-6 rounded border border-gray-200 bg-white" />
-        </div>
+    <div className="w-full h-full bg-gradient-to-br from-[#0A0A14] to-[#1A0A2E] p-6 flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.04]" style={{
+        backgroundImage: 'linear-gradient(rgba(147,51,234,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(147,51,234,0.3) 1px, transparent 1px)',
+        backgroundSize: '30px 30px'
+      }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-purple-500/10 blur-3xl rounded-full" />
+
+      {/* 3D Rotating Shape */}
+      <div className="relative w-28 h-28" style={{ perspective: '600px' }}>
+        <motion.div
+          animate={{ rotateY: [0, 360], rotateX: [0, 10, 0, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
+          className="w-full h-full relative"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 rounded-xl border"
+              style={{
+                transform: `rotateY(${angle}deg) translateZ(40px)`,
+                backgroundColor: `rgba(147, 51, 234, ${0.08 + i * 0.02})`,
+                borderColor: `hsla(${260 + i * 20}, 70%, 60%, ${0.3 + i * 0.05})`,
+                borderWidth: '1.5px',
+                backdropFilter: 'blur(2px)',
+              }}
+            />
+          ))}
+        </motion.div>
       </div>
 
-      {/* Interactive Wireframe */}
-      <div className="flex-1 flex gap-4">
-        <div className="w-1/3 bg-gray-50 border border-gray-200 rounded-lg p-3 flex flex-col gap-2 relative shadow-sm">
-          <div className="w-8 h-8 rounded-full bg-gray-200" />
-          <div className="w-full h-1.5 bg-gray-200 rounded-full" />
-          <div className="w-2/3 h-1.5 bg-gray-100 rounded-full" />
-          <div className="mt-auto pt-2 border-t border-gray-100 flex justify-between">
-            <div className="w-6 h-3 bg-blue-100 rounded" />
-            <div className="w-6 h-3 bg-gray-100 rounded" />
-          </div>
-          <span className="absolute top-2 right-2 text-[6px] text-blue-500 font-bold bg-blue-50 px-1 rounded">MOBILE</span>
-        </div>
-        <div className="flex-1 bg-white border border-gray-200 rounded-lg p-4 shadow-md flex flex-col gap-4 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
-          <div className="w-full h-8 bg-gray-50 border border-dashed border-gray-300 rounded flex items-center justify-center">
-            <span className="text-[8px] text-gray-400">Hero Section Container</span>
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            <div className="aspect-square bg-gray-50 border border-gray-100 rounded" />
-            <div className="aspect-square bg-gray-50 border border-gray-100 rounded" />
-            <div className="aspect-square bg-gray-50 border border-gray-100 rounded" />
-          </div>
-          <div className="w-full h-1.5 bg-blue-500 rounded-full opacity-20" />
-          <div className="w-3/4 h-1.5 bg-blue-500 rounded-full opacity-20" />
-          <span className="mt-auto text-[7px] text-gray-400 font-mono italic">DESKTOP_VIEW_PROTO_v4</span>
+      {/* Orbital ring */}
+      <motion.div
+        animate={{ rotate: [0, 360] }}
+        transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
+        className="absolute w-44 h-44 rounded-full"
+        style={{
+          borderTop: '1.5px solid rgba(147,51,234,0.25)',
+          borderRight: '1.5px solid rgba(59,130,246,0.15)',
+        }}
+      />
+
+      {/* Floating particles */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{
+            y: [0, -20, 0],
+            opacity: [0.2, 0.8, 0.2],
+          }}
+          transition={{ repeat: Infinity, duration: 2 + i * 0.3, delay: i * 0.2 }}
+          className="absolute w-1 h-1 rounded-full bg-purple-400/40"
+          style={{
+            left: `${20 + (i * 10)}%`,
+            top: `${15 + (i * 5)}%`,
+          }}
+        />
+      ))}
+
+      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+        <span className="text-[6px] font-mono text-purple-300/50">THREE.JS // WEBGL</span>
+        <div className="flex items-center gap-1.5">
+          <motion.div
+            animate={{ opacity: [1, 0.3, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="w-1.5 h-1.5 bg-purple-400 rounded-full"
+          />
+          <span className="text-[6px] font-mono text-purple-300/50">60 FPS</span>
         </div>
       </div>
     </div>
@@ -258,8 +283,8 @@ export default function SkillPopup() {
 
   const renderSkillContent = (id: string) => {
     switch (id) {
-      case 'web_dev': return <WebDevLogic />;
-      case 'ui_ux': return <UXProcess />;
+      case 'fullstack_dev': return <WebDevLogic />;
+      case '3d_art': return <ThreeDArt />;
       case 'ai_automation': return <N8NFlow />;
       case 'system_design': return <ArchitectureDiagram />;
       default: return null;

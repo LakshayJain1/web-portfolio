@@ -149,41 +149,41 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
       { 
         x: 400, yOffset: 160, 
         skill: {
-          id: 'web_dev',
-          title: 'Fullstack Systems',
+          id: 'fullstack_dev',
+          title: 'Fullstack Development',
           type: 'ENGINEERING',
-          description: 'Architecting scalable applications with Next.js 14, TypeScript, and serverless patterns. Expertise in middleware security, ISR strategies, and high-performance hydration cycles.',
-          techStack: ['Next.js', 'React', 'Node.js', 'PostgreSQL', 'Redis']
+          description: 'Building end-to-end digital products from concept to deployment. Proficient in modern frameworks like Next.js and React for frontend architecture, paired with robust Node.js backends and PostgreSQL databases. Experienced with TypeScript for type-safe code, Docker for containerization, and Redis for caching layers. Focused on delivering scalable, maintainable solutions with clean APIs and responsive UIs.',
+          techStack: ['Next.js', 'React', 'Node.js', 'PostgreSQL', 'TypeScript', 'Docker', 'Redis']
         }
       },
       { 
         x: 600, yOffset: 160, 
         skill: {
-          id: 'ui_ux',
-          title: 'Design Systems',
-          type: 'UX STRATEGY',
-          description: 'Creating cohesive design languages and atomic components. Beyond visuals, I focus on accessibility, tokens, and complex user journey mapping for seamless digital products.',
-          techStack: ['Figma', 'Storybook', 'Framer Motion', 'Tailwind', 'A11y']
+          id: '3d_art',
+          title: '3D Interactive Art Design',
+          type: 'CREATIVE TECH',
+          description: 'Crafting immersive 3D experiences that push the boundaries of web interactivity. Skilled in Three.js and WebGL for real-time 3D rendering, blended with Framer Motion for fluid UI animations. From low-poly worlds to interactive data visualizations, I merge creative direction with technical execution to build visually compelling digital art installations.',
+          techStack: ['Three.js', 'WebGL', 'Blender', 'Framer Motion', 'Canvas API']
         }
       },
       { 
         x: 800, yOffset: 160, 
         skill: {
           id: 'ai_automation',
-          title: 'AI Orchestration',
+          title: 'AI Automations',
           type: 'AUTOMATION',
-          description: 'Designing autonomous workflows that bridge LLMs with business logic. Expertise in RAG pipelines, n8n orchestration, and multi-agent systems using Claude & GPT-4.',
-          techStack: ['n8n', 'Python', 'Vector DBs', 'LangChain', 'OpenAI']
+          description: 'Designing intelligent autonomous systems that bridge LLMs with real-world business workflows. Expertise in building RAG pipelines with vector databases, orchestrating multi-agent systems using Claude and GPT-4, and automating complex processes through n8n workflows. Focused on creating practical AI solutions that drive efficiency and scale.',
+          techStack: ['n8n', 'Python', 'LangChain', 'Vector DBs', 'OpenAI', 'Claude']
         }
       },
       { 
         x: 1000, yOffset: 160, 
         skill: {
           id: 'system_design',
-          title: 'Portfolio Architecture',
+          title: 'System Design',
           type: 'SYSTEM DESIGN',
-          description: 'The blueprint of this portfolio: A decoupled architecture using React Context for global state, a custom Canvas API physics engine, and Framer Motion for high-fidelity UI overlays.',
-          techStack: ['System Design', 'Canvas API', 'Context API', 'State Machines']
+          description: 'Architecting scalable, resilient systems with a focus on clean separation of concerns and maintainable codebases. Proficient in microservices architecture, cloud infrastructure (AWS), container orchestration (Docker), and state management strategies. Experienced with designing real-time systems, caching layers, and event-driven architectures that handle complexity gracefully.',
+          techStack: ['Microservices', 'AWS', 'Docker', 'Redis', 'State Machines', 'Event-Driven']
         }
       },
     ],
