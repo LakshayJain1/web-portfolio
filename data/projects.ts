@@ -13,76 +13,58 @@ export interface ProjectData {
 
 export const PROJECTS: ProjectData[] = [
   {
-    slug: "resxume",
-    title: "RESXUME",
-    type: "WEB DESIGN",
+    slug: "inven-track",
+    title: "INVEN TRACK",
+    type: "WEB APP",
     description:
-      "A sleek resume-builder web product with clean layout, smooth interactions and conversion-focused UX.",
+      "A full-stack inventory management app with real-time stock tracking, automated low-stock alerts, and an intuitive analytics dashboard.",
     excerpt:
-      "Conversion-first resume builder with modular sections, live preview, and export-ready layouts.",
+      "Real-time inventory tracking, automated alerts, and dashboard analytics for streamlined stock management.",
     content: [
-      "RESXUME was designed to strip away the friction of traditional resume tools. The goal was a product that feels fast, confident, and visually polished from the first interaction.",
-      "The layout system uses a modular block approach — users drag sections, swap templates, and see changes instantly. Typography and spacing tokens keep every export consistent across PDF and web views.",
-      "Key UX decisions focused on reducing drop-off: progressive disclosure for advanced settings, inline validation, and a single primary CTA path from landing to first export.",
+      "INVEN TRACK was built to solve the chaos of manual inventory management. The app provides a centralized dashboard where businesses can track stock levels in real time, set automated alerts for low inventory, and generate actionable insights from usage patterns.",
+      "The architecture uses Next.js for the frontend with a PostgreSQL backend, delivering fast page loads and real-time data synchronization. The dashboard visualizes key metrics — turnover rates, restock urgency, and category breakdowns — so users can make informed decisions at a glance.",
+      "A clean, role-based UI allows team members to manage products, process orders, and update stock quantities without friction. The goal was to make inventory management feel effortless, turning a tedious task into a streamlined workflow.",
     ],
-    techStack: ["React", "Framer", "Figma", "CSS"],
-    link: "https://devlakshay.framer.ai/#projects",
-    accentColor: "#5C94FC",
-    year: "2024",
+    techStack: ["Next.js", "TypeScript", "PostgreSQL", "Tailwind"],
+    link: "https://inven-tracker.vercel.app/dashboard",
+    accentColor: "#3B82F6",
+    year: "2025",
   },
   {
-    slug: "juice-factory",
-    title: "JUICE FACTORY",
-    type: "PROTOTYPING",
+    slug: "agent-corp",
+    title: "AGENT CORP",
+    type: "WEBSITE",
     description:
-      "A vibrant brand & interactive Framer prototype for a fresh juice business — full UX from landing to checkout.",
+      "A multi-agent AI company website showcasing autonomous agent services, team collaboration, and workflow automation capabilities.",
     excerpt:
-      "End-to-end Framer prototype for a juice brand — playful visuals, scroll storytelling, and checkout flow.",
+      "Multi-agent AI platform site highlighting autonomous services and workflow automation.",
     content: [
-      "JUICE FACTORY started as a brand exercise and evolved into a full interactive prototype. The visual language leans into saturated citrus tones, chunky type, and motion that feels juicy — not corporate.",
-      "The prototype maps the entire customer journey: hero storytelling, flavor catalog, subscription upsell, and a streamlined checkout. Each screen was built to test comprehension and delight before any code was written.",
-      "Framer's component variants made it easy to iterate on micro-interactions — pour animations, cart feedback, and mobile thumb-zone CTAs were all validated in user walkthroughs.",
+      "AGENT CORP is a brand presence site for a multi-agent AI company. It communicates complex technology through clear visual storytelling, breaking down autonomous agent services into digestible sections with interactive demonstrations.",
+      "The design balances technical credibility with approachability — a clean, modern layout with subtle motion cues that guide visitors through the agent ecosystem. Each service card explains what an agent does, how it collaborates with other agents, and the business value it delivers.",
+      "Built with Next.js and Framer Motion, the site delivers smooth page transitions and a polished feel. The component system is designed for easy content updates, allowing the team to add new agent services without touching core layout code.",
     ],
-    techStack: ["Framer", "Figma", "Branding", "Prototype"],
-    link: "https://devlakshay.framer.ai/#projects",
-    accentColor: "#FF6B35",
-    year: "2024",
-  },
-  {
-    slug: "devyut",
-    title: "DEVYUT",
-    type: "WEB DESIGN",
-    description:
-      "A professional tech-company website with dark aesthetic, 3D accents and polished component system.",
-    excerpt:
-      "Dark-mode tech company site with 3D hero accents and a scalable component library.",
-    content: [
-      "DEVYUT needed a presence that communicated engineering credibility without feeling sterile. The solution pairs a deep charcoal palette with selective 3D accents and crisp monospace details.",
-      "A shared component system covers cards, stat blocks, team grids, and case-study teasers. Tokens for elevation, border glow, and accent cyan keep the UI cohesive as new pages ship.",
-      "Performance was a first-class constraint: lazy-loaded 3D scenes, optimized image delivery, and skeleton states for every async block so the site feels instant on mid-range hardware.",
-    ],
-    techStack: ["Next.js", "ThreeJS", "Figma", "CSS"],
-    link: "https://devlakshay.framer.ai/#projects",
-    accentColor: "#55CCFF",
+    techStack: ["Next.js", "Framer", "TypeScript", "Tailwind"],
+    link: "https://agent-corp.vercel.app/",
+    accentColor: "#8B5CF6",
     year: "2025",
   },
   {
     slug: "ordeta",
     title: "ORDETA",
-    type: "WEB DEV",
+    type: "WEBSITE",
     description:
-      "A fully developed product website with dynamic interactions, built from scratch.",
+      "A professional company website for Ordeta, delivering a clean brand presence with modern web technologies and seamless user experience.",
     excerpt:
-      "Hand-coded product site with GSAP motion, custom cursor states, and scroll-driven reveals.",
+      "Clean brand presence site with modern design and seamless user experience.",
     content: [
-      "ORDETA was built from scratch to showcase a product with personality. No page-builder — just semantic HTML, a custom CSS architecture, and GSAP for choreographed scroll sequences.",
-      "Interaction design drives the narrative: staggered text reveals, pinned product sections, and hover states that respond with pixel-snapped motion curves tuned to feel arcade-adjacent.",
-      "The codebase prioritizes maintainability — BEM-style class naming, a small animation controller, and responsive breakpoints tested down to 320px widths.",
+      "ORDETA's website was crafted to establish a strong digital presence that reflects the company's professionalism and attention to detail. Every element — from typography to spacing — was chosen to communicate trust and quality.",
+      "The design follows a clean, minimal aesthetic with purposeful whitespace and a refined color palette. Interactive elements are subtle yet engaging, using hover states and scroll-triggered reveals to create a sense of polish without overwhelming the content.",
+      "Built with modern web technologies, the site is fully responsive and optimized for performance. The focus was on creating a fast, accessible experience that works seamlessly across all devices, ensuring visitors get a consistent brand impression whether on desktop or mobile.",
     ],
-    techStack: ["HTML", "CSS", "JavaScript", "GSAP"],
-    link: "https://devlakshay.framer.ai/#projects",
+    techStack: ["Next.js", "TypeScript", "Tailwind", "Framer"],
+    link: "https://www.ordeta.tech/",
     accentColor: "#E52020",
-    year: "2023",
+    year: "2025",
   },
 ];
 

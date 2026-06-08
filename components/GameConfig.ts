@@ -198,9 +198,9 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
     ]
   },
   projects: { 
-    width: 2800, 
+    width: 2200, 
     startX: 100, 
-    pipes: [{x: 2600, to: 'contact'}],
+    pipes: [{x: 2000, to: 'contact'}],
     theme: 'forest',
     skyColor: '#5C94FC',
     groundType: 'ground_green',
@@ -208,7 +208,6 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
       { x: 500, yOffset: 160, project: PROJECTS[0] },
       { x: 1000, yOffset: 160, project: PROJECTS[1] },
       { x: 1500, yOffset: 160, project: PROJECTS[2] },
-      { x: 2000, yOffset: 160, project: PROJECTS[3] },
     ],
     coins: [
       { x: 650, yOffset: 80 },
@@ -224,15 +223,11 @@ export const WORLD_DATA: Record<string, WorldConfig> = {
       { x: 1750, yOffset: 120 },
       { x: 1800, yOffset: 100 },
       { x: 1850, yOffset: 80 },
-      { x: 2200, yOffset: 80 },
-      { x: 2250, yOffset: 80 },
-      { x: 2300, yOffset: 80 },
     ],
     enemies: [
       { id: 'p1', type: 'goomba', x: 400, yOffset: 0, dir: -1 },
       { id: 'p2', type: 'goomba', x: 900, yOffset: 0, dir: -1 },
       { id: 'p3', type: 'koopa', x: 1400, yOffset: 0, dir: -1 },
-      { id: 'p4', type: 'goomba', x: 1900, yOffset: 0, dir: -1 },
     ],
     powerUpBoxes: [
       { x: 700, yOffset: 160, powerUp: 'mushroom' },
